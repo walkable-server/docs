@@ -1,12 +1,14 @@
-# Walkable Schema
+# Floor-plan
 
-As you can see in **Usage** guide, we need to provide `sqb/compile-schema` a map describing the schema. You've got some idea about how such a schema looks like as you glanced the example in **Overview** section. Now let's walk through each key of the schema map in details.
+As you can see in **Usage** guide, we need to provide `floor-plan/compile-floor-plan` a map describing the `floor-plan`. You've got some idea about how such a `floor-plan` looks like as you glanced the example in **Overview** section. Now let's walk through each key of the `floor-plan` map in details.
 
-> Notes:
->
-> * SQL snippets have been simplified for explanation purpose
-> * Backticks are used as quote marks
-> * For clarity, part of the schema may not be included
+{% hint style="info" %}
+Notes:
+
+* SQL snippets have been simplified for explanation purpose
+* Backticks are used as quote marks
+* For clarity, part of the floor-plan may not be included
+{% endhint %}
 
 ## 1 :idents
 
@@ -40,15 +42,15 @@ These are idents whose key implies some condition. Instead of providing just the
 For example, the following vector ident:
 
 ```text
-;; dispatch-key: :person/by-id
-;; ident arguments: 1
+;; dispatch-key: `:person/by-id`
+;; ident arguments: `1`
 [:person/by-id 1]
 ```
 
-will require a schema like:
+will require a floor-plan like:
 
 ```text
-;; schema
+;; floor-plan
 {:idents {:person/by-id :person/id}}
 ```
 
@@ -107,7 +109,7 @@ and you want to get a farmer along with their cow using the query:
 then you must define the join "path" like this:
 
 ```text
-;; schema
+;; floor-plan
 {:joins {:farmer/cow [:farmer/cow-id :cow/id]}}
 ```
 
@@ -179,7 +181,7 @@ you may query for a person and their pets along with their adoption year
 [{[:person/by-id 1] [:person/name {:person/pets [:pet/name :person-pet/adoption-year]}]}]
 ```
 
-then the schema for the join is as simple as:
+then the `:joins` part of our floor-plan is as simple as:
 
 ```text
 ;; schema
@@ -240,16 +242,16 @@ and table `cow` has:
 |----+-------+----------|
 ```
 
-The schema for this example can be a good exercise for the reader of this documentation. \(Sorry, actually I'm just too lazy to type it here :D \)
+The `floor-plan` for this example can be a good exercise for the reader of this documentation. \(Sorry, actually I'm just too lazy to type it here :D \)
 
 ## 3 :reversed-joins
 
-A handy way to avoid typing the schema for joins whose path is just reversed version of another.
+A handy way to avoid typing a join whose path is just reversed version of another.
 
-The schema for such a join is straightforward:
+The floor-plan for such a join is straightforward:
 
 ```text
-;; schema
+;; floor-plan
 {:joins          {:farmer/cow [:farmer/cow-id :cow/id]}
  :reversed-joins {:cow/owner :farmer/cow}}
 ```
@@ -273,15 +275,20 @@ Also, another reason to use `:reversed-joins` is that it helps with semantics.
 A set of available columns must be provided at compile time so Walkable can pre-compute part of SQL query strings.
 
 ```text
+;; floor-plan
 {:columns #{:farmer/name
             :cow/color}}
 ```
 
 Walkable will automatically include columns found in `:joins` paths so you don't have to.
 
+{% hint style="warning" %}
 Please note: keywords not found in the column set will be ignored. That means if you forget to include any of them, you can't use the missing one in a query's property or filter.
+{% endhint %}
 
-> The rationale for having a pre-defined set of columns is that your query resolver doesn't have to limit itself to an SQL database as a single source of data. If Walkable can't match a keyword to a column, an ident or a join, it will be passed down to the next plugin in the Pathom plugin chain.
+{% hint style="info" %}
+The rationale for having a pre-defined set of columns is that your query resolver doesn't have to limit itself to an SQL database as a single source of data. If Walkable can't match a keyword to a column, an ident or a join, it will be passed down to the next plugin in the Pathom plugin chain.
+{% endhint %}
 
 On the other hand, you don't have to include every single column in your database if you know you will never use some of them in a query's property or filter.
 
@@ -290,7 +297,7 @@ On the other hand, you don't have to include every single column in your databas
 Idents and joins can have cardinality of either `:many` \(which is default\) or `:one`. You declare that by their dispatch keys:
 
 ```text
-;; schema
+;; floor-plan
 {:cardinality {:person/by-id :one
                ;; you can skip all `:many`!
                :people/all   :many}}
@@ -300,83 +307,30 @@ Idents and joins can have cardinality of either `:many` \(which is default\) or 
 
 Please see documentation for [Filters](filters.md)
 
-## 7 :quote-marks
+## 7 :emitter
 
-Different SQL databases use different strings to denote quotation. For instance, MySQL use a pair of backticks:
+Please see documentation for [Emitters](filters.md)
 
-```sql
-SELECT * FROM `table`
-```
+## 8 :required-columns
 
-while PostgreSQL use quotation marks:
-
-```sql
-SELECT * FROM "table"
-```
-
-You need to provide the quote-marks as a vector of two strings
-
-```text
-;; schema for mysql
-{:quote-marks ["`", "`"]}
-```
-
-or
-
-```text
-;; schema for postgres
-{:quote-marks ["\"", "\""]}
-```
-
-For convenience, you can use the predefined vars instead:
-
-```text
-;; schema for mysql
-{:quote-marks sqb/backticks}
-;; or postgresql
-{:quote-marks sqb/quotation-marks}
-```
-
-The default quote-marks are the backticks, which work for mysql and sqlite.
-
-## 8 :sqlite-union
-
-Set it to `true` if you're using SQLite, otherwise ignore it. Basically SQLite don't allow to union queries directly. With other SQL DBMS, the union query can be something like:
-
-```sql
-SELECT a, b FROM foo WHERE ...
-UNION ALL
-SELECT a, b FROM foo WHERE ...
-```
-
-SQLite will raise a syntax error exception for such queries. Instead, a valid query for SQLite must be something like:
-
-```sql
-SELECT * FROM (SELECT a, b FROM foo WHERE ...)
-UNION ALL
-SELECT * FROM (SELECT a, b FROM foo WHERE ...)
-```
-
-`{:sqlite-union true}` is for enforcing just that.
-
-## 9 :required-columns \(Experimental - Subject to change\)
-
-> You need to understand Pathom plugins to make use of this.
+{% hint style="info" %}
+You need to understand Pathom plugins to make use of this.
+{% endhint %}
 
 Automatically fetch some columns of the same level whenever a namespace keyword is asked for. This is useful when you want to derive a property from some SQL columns using Clojure code \(to be specific, as Pathom plugins\)
 
 Please see [example.clj](https://github.com/walkable-server/walkable/tree/ab05c4706867ea7cce2daa6b903ee23834e1cf7f/dev/src/walkable_demo/handler/example.clj) for examples. Things to look at:
 
 * `derive-attributes` which calculates `:pet/age` and `:person/age` from `:pet/yob` and `:person/yob` respectively.
-* required inputs for `:pet/age` and `:person/age` in `:required-columns` schema:
+* required inputs for `:pet/age` and `:person/age` in `:required-columns`:
 
 ```text
-;; schema
+;; floor-plan
 {:required-columns {:pet/age    #{:pet/yob}
                     :person/age #{:person/yob}}}
 ```
 
-## 10 :pseudo-columns \(Experimental - Subject to change\)
+## 9 :pseudo-columns
 
 Please see [dev.clj](https://github.com/walkable-server/walkable/tree/ab05c4706867ea7cce2daa6b903ee23834e1cf7f/dev/src/dev.clj) for examples.
 
