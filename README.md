@@ -120,7 +120,7 @@ I urge you to challenge your assumptions by implementing your own version of the
 
 ## Overview
 
-Basically you define your schema like this:
+Basically you define your floor-plan like this:
 
 ```text
 {:idents           { ;; query with `[:person/by-id 1]` will result in
@@ -247,20 +247,20 @@ First of all, you need to build pathom "parser" with walkable's `sqb/pull-entiti
           p/map-reader]})]}))
 ```
 
-Then you need to define your schema and compile it
+Then you need to define your floor-plan and compile it
 
 ```text
 ;; both sync and async versions
-(def compiled-schema
-  (sqb/compile-schema
-    {:quote-marks ...
+(def compiled-floor-plan
+  (floor-plan/compile-floor-plan
+    {:emitter     ...
      :columns     ...
      :idents      ...
      :joins       ...
      ...          ...}))
 ```
 
-Details about the schema is [here](doc/schema.md).
+Details about the floor-plan is [here](doc/floor-plan.md).
 
 Ready! It's time to run your graph queries:
 
@@ -277,7 +277,7 @@ Sync version:
       my-run-query jdbc/query]
   (sync-parser {::sqb/sql-db     my-db
                 ::sqb/run-query  my-run-query
-                ::sqb/sql-schema compiled-schema}
+                ::sqb/floor-plan compiled-floor-plan}
                my-query))
 ```
 
@@ -312,7 +312,7 @@ Async version, Clojure JVM:
       (<! (async-parser
             {::sqb/sql-db     my-db
              ::sqb/run-query  my-run-query
-             ::sqb/sql-schema compiled-schema}
+             ::sqb/floor-plan compiled-floor-plan}
             my-query)))))
 ```
 
@@ -338,7 +338,8 @@ Please see the file dev.clj \(or its nodejs version dev.cljs\) for executable ex
 
 Walkable comes with some optimizations:
 
-* A compile phase \(`sqb/compile-schema`\) that pre-computes many parts of final SQL query strings.
+* A compile phase \(`floor-plan/compile-floor-plan`\) that pre-computes many parts of final SQL query strings.
+
 * Reduce roundtrips between Clojure and SQL server by combining similar queries introduced by the same om.next join query. \(aka N+1 problem\)
 
 More optimization will be added. Check github issues for progress.
@@ -362,4 +363,3 @@ I'm available for questions regarding walkable on `#walkable` clojurians slack c
 Copyright © 2018 Hoàng Minh Thắng
 
 Datomic® is a registered trademark of Cognitect, Inc.
-
