@@ -10,9 +10,9 @@ A more detailed guide for Duct can be found at:
 [https://github.com/duct-framework/docs/blob/master/GUIDE.rst](https://github.com/duct-framework/docs/blob/master/GUIDE.rst)
 {% endhint %}
 
-## Lein profiles
+## Leiningen profiles
 
-Walkabe source code comes with three Leining profiles for three supported sql flavors: `postgres`, `mysql` and `sqlite`. You **must** specify one of them whenever you start a REPL server or run tests.
+Walkabe source code comes with three Leiningen profiles for three supported sql flavors: `postgres`, `mysql` and `sqlite`. You **must** specify one of them whenever you start a REPL server or run tests.
 
 ## Development environment
 
@@ -71,3 +71,4 @@ Testing is fastest through the REPL, as you avoid environment startup time.
 dev=> (test)
 ...
 ```
+

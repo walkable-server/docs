@@ -1,4 +1,8 @@
-# Advanced features for floor-plan
+---
+description: Advanced features for floor-plan
+---
+
+# Floor-plan \(advanced\)
 
 ## 1. Syntactic sugars
 
@@ -22,11 +26,11 @@ this is shorter:
           "person"}}
 ```
 
-This also applies keys under `:extra-conditions`, `:joins` and `:cardinality`.
+This also applies to keys under `:extra-conditions`, `:joins` and `:cardinality`.
 
 ## 2. Lambda form for `:extra-conditions`
 
-Instead of specifying a fixed filters set for an ident or a join, you can use a function that returns such filters set. The function accepts `env` as its argument.
+Instead of specifying a fixed filters set for an ident or a join, you; can use a function that returns such filters set. The function accepts `env` as its argument.
 
 Please see [dev.clj](https://github.com/walkable-server/walkable/tree/ab05c4706867ea7cce2daa6b903ee23834e1cf7f/dev/src/dev.clj) for examples.
 

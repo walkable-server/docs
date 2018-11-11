@@ -1,10 +1,14 @@
-# Filters
+---
+description: >-
+  Filters are Walkable's DSL to describe conditions in SQL's WHERE clauses using
+  pure Clojure data structure.
+---
 
-Filters are Walkable's DSL to describe conditions in SQL's `WHERE` clauses using pure Clojure data structure.
+# Filters
 
 ## Using filters
 
-Any valid Walkable S-expression that evaluates to boolean \(not just some truthy values\) can be used in filter.
+Any valid Walkable S-expression that evaluates to boolean \(not just some truthy values\) can be used in a filter.
 
 ### Using filters directly in queries
 
@@ -34,7 +38,7 @@ You may want to enforce filters for specific idents/joins:
 
 ## Joins in filters
 
-You've seen filters used against columns of the current table. If you have defined some joins, you can also put constraints on columns of the joined tables, too.
+You've seen filters used against columns of the current table. If you have defined some `:joins` in your `floor-plan`, you can also put constraints on columns of the joined tables, too.
 
 ```text
 ;; find all people whose name starts with "jon" or whose friend's name
