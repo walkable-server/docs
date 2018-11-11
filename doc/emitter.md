@@ -84,7 +84,7 @@ SELECT "PERSON"."name", "PERSON"."age" FROM "PERSON";
 
 ## :rename-tables, :rename-columns
 
-Sometimes you want to specify the exact name, let alone `transform-*-name` functions:
+Sometimes you want to specify the exact name, regardless of `:transform-table-name` / `:transform-column-name` functions:
 
 {% tabs %}
 {% tab title="Emitter" %}
