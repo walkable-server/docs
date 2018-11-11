@@ -63,8 +63,8 @@ For example if all your real table names are upper-cased \(while we all like our
 {% tabs %}
 {% tab title="Emitter" %}
 ```text
-(def your-emitter 
-  (merge emitter/postgres-emitter 
+(def your-emitter
+  (merge emitter/postgres-emitter
     {:transform-table-name (fn [table-name] (clojure.string/upper-case table-name))}))
 ```
 {% endtab %}
@@ -86,11 +86,54 @@ SELECT "PERSON"."name", "PERSON"."age" FROM "PERSON";
 
 Sometimes you want to specify the exact name, let alone `transform-*-name` functions:
 
+{% tabs %}
+{% tab title="Emitter" %}
+```text
+(def your-emitter
+  (merge emitter/postgres-emitter
+    {:transform-table-name (fn [table-name] (clojure.string/upper-case table-name))}))
+```
+{% endtab %}
+
+{% tab title="Keyword" %}
+`:person/name`, `:person/age`
+{% endtab %}
+
+{% tab title="Real table in database" %}
+"PERSON", as in this sql query:
+
+```text
+SELECT "PERSON"."name", "PERSON"."age" FROM "PERSON";
+```
+{% endtab %}
+{% endtabs %}
+
 ### :rename-keywords
 
 Maybe matching just the table name or the column name is not enough. You want to match the exact pair of table + column name.
 
+{% tabs %}
+{% tab title="Emitter" %}
+```text
+(def your-emitter
+  (merge emitter/postgres-emitter
+    {:transform-table-name (fn [table-name] (clojure.string/upper-case table-name))}))
+```
+{% endtab %}
+
+{% tab title="Keyword" %}
+`:person/name`, `:person/age`
+{% endtab %}
+
+{% tab title="Real table in database" %}
+"PERSON", as in this sql query:
+
+```text
+SELECT "PERSON"."name", "PERSON"."age" FROM "PERSON";
+```
+{% endtab %}
+{% endtabs %}
+
 ### :wrap-select-strings
 
 Specific to Sqlite. It's unlikely that you want to override this. \(Doc comming soon\)
-
