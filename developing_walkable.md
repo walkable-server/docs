@@ -71,12 +71,3 @@ Testing is fastest through the REPL, as you avoid environment startup time.
 dev=> (test)
 ...
 ```
-
-But you can also run tests through Leiningen.
-
-```bash
-lein test
-```
-
-
-
