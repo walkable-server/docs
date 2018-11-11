@@ -1,4 +1,4 @@
-# Advanced syntax and features for schema
+# Advanced features for floor-plan
 
 ## 1. Syntactic sugars
 
@@ -9,7 +9,7 @@ If two or more dispatch key share the same configuration, it's handy to have the
 instead of:
 
 ```text
-;; schema
+;; floor-plan
 {:idents {:people/all "person"
           :my-friends "person"}}
 ```
@@ -17,7 +17,7 @@ instead of:
 this is shorter:
 
 ```text
-;; schema
+;; floor-plan
 {:idents {[:people/all :my-friends]
           "person"}}
 ```
