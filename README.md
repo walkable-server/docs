@@ -249,6 +249,7 @@ Then you need to define your floor-plan and compile it
 
 ```text
 ;; both sync and async versions
+(require '[walkable.sql-query-builder.floor-plan :as floor-plan])
 (def compiled-floor-plan
   (floor-plan/compile-floor-plan
     {:emitter     ...
