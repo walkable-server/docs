@@ -1,9 +1,3 @@
----
-description: >-
-  Floor-plan is how you tech Walkable about your database's design so it can
-  automatically find the data you need.
----
-
 # Floor-plan
 
 As you can see in **Usage** guide, we need to provide `floor-plan/compile-floor-plan` a map describing the `floor-plan`. You've got some idea about how such a `floor-plan` looks like as you glanced the example in **Overview** section. Now let's walk through each key of the `floor-plan` map in details.

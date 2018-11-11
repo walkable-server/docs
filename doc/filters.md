@@ -1,9 +1,3 @@
----
-description: >-
-  Filters are Walkable's DSL to describe conditions in SQL's WHERE clauses using
-  pure Clojure data structure.
----
-
 # Filters
 
 ## Using filters

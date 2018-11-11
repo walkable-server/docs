@@ -1,7 +1,3 @@
----
-description: Advanced features for floor-plan
----
-
 # Floor-plan \(advanced\)
 
 ## 1. Syntactic sugars
