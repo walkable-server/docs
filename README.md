@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/walkable-server/walkable.svg?branch=master)](https://travis-ci.org/walkable-server/walkable)
 
 > Data dominates. If you’ve chosen the right data structures and organized things well, the algorithms will almost always be self-evident. Data structures, not algorithms, are central to programming. -- Rob Pike
-
+>
 > Bad programmers worry about the code. Good programmers worry about data structures and their relationships. -- Linus Torvalds
 
 |  |  |
@@ -24,21 +24,21 @@ Ever imagined sending queries like this to your SQL database?
 {% endtab %}
 
 {% tab title="Data" %}
-#### Table "person":
+### Table "person":
 
 | id | name | age |
 | :---: | :--- | :---: |
 | 1 | Mary | 20 |
 | 2 | John | 15 |
 
-#### Table "pet":
+### Table "pet":
 
 | id | name | favorite\_location |
 | :--- | :--- | :--- |
 | 10 | Tom | garden |
 | 20 | Jerry | kitchen |
 
-#### Table "person\_pet":
+### Table "person\_pet":
 
 | person\_id | pet\_id |
 | :---: | :---: |
@@ -72,7 +72,7 @@ or a bit more sophisticated:
 {% endtab %}
 
 {% tab title="Data" %}
-#### Table "article":
+### Table "article":
 
 | id | title | author\_id | hidden | created\_date |
 | :---: | :--- | :---: | :---: | :--- |
@@ -80,7 +80,7 @@ or a bit more sophisticated:
 | 2 | Welcome | 20 | false | 2018-11-10 |
 | 3 | Unfinished | 20 | true | 2018-09-20 |
 
-#### Table "user":
+### Table "user":
 
 | id | username | karma |
 | :---: | :--- | :---: |
@@ -105,7 +105,7 @@ Yes, you can. Have your data fetched in your Clojure mission critical app with c
 You can learn about the above query language [here](doc/query_language.md)
 
 {% hint style="info" %}
-#### **Walkable is NOT about om.next**
+### **Walkable is NOT about om.next**
 
 People may have the impression that Walkable \(and Pathom\) is specific to om.next. That is NOT the case! Walkable requires a query language that is expressive and based off data structure. Om.next query language happens to satisfy that.
 
@@ -113,7 +113,7 @@ Walkable's goal is to become the ultimate SQL library for Clojure.
 {% endhint %}
 
 {% hint style="warning" %}
-#### For plain-SQL enthusiasts or ORM fans
+### For plain-SQL enthusiasts or ORM fans
 
 I urge you to challenge your assumptions by implementing your own version of the Realworld API Spec with your favorite ORM \(Django, Rails, Korma, Toucan, whatever\) and compare it with the implementation using Walkable [here](https://github.com/walkable-server/realworld/).
 {% endhint %}
@@ -260,7 +260,7 @@ Then you need to define your floor-plan and compile it
      ...          ...}))
 ```
 
-Details about the floor-plan is [here](doc/floor-plan.md).
+Details about the floor-plan is [here](https://github.com/walkable-server/walkable-server.github.io/tree/ee970dafd13b3f6a6f6b8fa3001e171b44b85f26/doc/floor-plan.md).
 
 Ready! It's time to run your graph queries:
 
@@ -339,7 +339,6 @@ Please see the file dev.clj \(or its nodejs version dev.cljs\) for executable ex
 Walkable comes with some optimizations:
 
 * A compile phase \(`floor-plan/compile-floor-plan`\) that pre-computes many parts of final SQL query strings.
-
 * Reduce roundtrips between Clojure and SQL server by combining similar queries introduced by the same om.next join query. \(aka N+1 problem\)
 
 More optimization will be added. Check github issues for progress.
@@ -363,3 +362,4 @@ I'm available for questions regarding walkable on `#walkable` clojurians slack c
 Copyright © 2018 Hoàng Minh Thắng
 
 Datomic® is a registered trademark of Cognitect, Inc.
+
