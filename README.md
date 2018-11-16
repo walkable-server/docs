@@ -12,7 +12,7 @@ Ever imagined sending queries like this to your SQL database?
 
 {% tabs %}
 {% tab title="Query" %}
-```text
+```clojure
 [{[:person/by-id 1]
   [:person/id
    :person/name
@@ -45,7 +45,7 @@ Ever imagined sending queries like this to your SQL database?
 {% endtab %}
 
 {% tab title="Result" %}
-```text
+```clojure
 {[:person/by-id 1]
  {:person/id   1
   :person/name "Mary"
@@ -60,7 +60,7 @@ or a bit more sophisticated:
 
 {% tabs %}
 {% tab title="Query" %}
-```text
+```clojure
 `[{(:articles/all {:filters [:and [:= false :article/hidden]
                              {:article/author [:= :user/username "lucy"]}]})
    [:article/title
@@ -87,7 +87,7 @@ or a bit more sophisticated:
 {% endtab %}
 
 {% tab title="Result" %}
-```text
+```clojure
 [{:articles/all
   [{:article/title        "Welcome"
     :article/created-date "2018-11-10"
@@ -120,7 +120,7 @@ I urge you to challenge your assumptions by implementing your own version of the
 
 Basically you define your floor-plan like this:
 
-```text
+```clojure
 {:idents           { ;; query with `[:person/by-id 1]` will result in
                     ;; `FROM person WHERE person.id = 1`
                     :person/by-id :person/id
@@ -156,7 +156,7 @@ Basically you define your floor-plan like this:
 
 then you can make queries like this:
 
-```text
+```clojure
 '[{(:people/all {:limit    5
                  :offset   10
                  ;; remember the extra-conditions above? you can use the same syntax here:
@@ -173,14 +173,14 @@ then you can make queries like this:
 
 As you can see the filter syntax is in pure Clojure. It's not just for aesthetic purpose. The generated SQL will always get parameterized so it's safe from injection attacks. For instance:
 
-```text
+```clojure
 [:or [:like :person/name "john"]
      [:in :person/id 3 4 7]]
 ```
 
 will result in
 
-```text
+```clojure
 (jdbc/query ["SELECT <...> WHERE person.name LIKE ? OR person.id IN (3, 4, 7)"
              "john"]
 ```
@@ -201,7 +201,7 @@ To be more specific, anyone at any level of enthusiasm:
 
 ## Installation
 
-```text
+```clojure
 ;; no stable version yet
 [walkable "1.1.0-SNAPSHOT"]
 ```
@@ -218,7 +218,7 @@ Walkable comes with two versions: synchronous \(for Clojure\) and asynchronous \
 
 First of all, you need to build pathom "parser" with walkable's `sqb/pull-entities` \(or `sqb/async-pull-entities`\)
 
-```text
+```clojure
 (require '[com.wsscode.pathom.core :as p])
 (require '[walkable.sql-query-builder :as sqb])
 
@@ -247,7 +247,7 @@ First of all, you need to build pathom "parser" with walkable's `sqb/pull-entiti
 
 Then you need to define your floor-plan and compile it
 
-```text
+```clojure
 ;; both sync and async versions
 (require '[walkable.sql-query-builder.floor-plan :as floor-plan])
 (def compiled-floor-plan
@@ -259,13 +259,13 @@ Then you need to define your floor-plan and compile it
      ...          ...}))
 ```
 
-Details about the floor-plan is [here](https://github.com/walkable-server/walkable-server.github.io/tree/ee970dafd13b3f6a6f6b8fa3001e171b44b85f26/doc/floor-plan.md).
+Details about the floor-plan is [here](https://walkable.gitbook.io/walkable/doc/floor-plan).
 
 Ready! It's time to run your graph queries:
 
 Sync version:
 
-```text
+```clojure
 (require '[clojure.java.jdbc :as jdbc])
 
 (let [my-query     [{:people/all [:person/name]}]
@@ -282,7 +282,7 @@ Sync version:
 
 where `my-run-query` and `my-db` is any pair of a function plus a database instance \(even a pair of mock ones!\) that work together like this:
 
-```text
+```clojure
 (my-run-query my-db ["select * from fruit where color = ?" "red"])
 ;; => [{:id 1, :color "red"} {:id 3, :color "red"} ...]
 
@@ -292,7 +292,7 @@ where `my-run-query` and `my-db` is any pair of a function plus a database insta
 
 Async version, Clojure JVM:
 
-```text
+```clojure
 (require '[clojure.java.jdbc :as jdbc])
 (require '[clojure.core.async :refer [go promise-chan put! >! <!]])
 
@@ -317,7 +317,7 @@ Async version, Clojure JVM:
 
 As you can see, `my-run-query` and `my-db` are similar to those in sync version, except that `my-run-query` doesn't return the result directly but in a channel.
 
-For Nodejs, you'll need to convert between Javascript and Clojure data structure. The file [dev.cljs](https://github.com/walkable-server/walkable/tree/ab05c4706867ea7cce2daa6b903ee23834e1cf7f/dev/src/dev.cljs) has examples using sqlite3 node module.
+For Nodejs, you'll need to convert between Javascript and Clojure data structure. The file [dev.cljs](https://github.com/walkable-server/walkable/blob/master/dev/src/common/dev.cljs) has examples using sqlite3 node module.
 
 {% hint style="info" %}
 Please see the file dev.clj \(or its nodejs version dev.cljs\) for executable examples. Consult config.edn for SQL migrations for those examples.
