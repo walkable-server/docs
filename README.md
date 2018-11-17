@@ -2,7 +2,7 @@
 
 |  |  |
 | :--- | :--- |
-| ![](.gitbook/assets/walkable%20%281%29.png) | **Walkable** is a serious way to fetch data from SQL for Clojure: Datomic® pull \(Graphql-ish\) syntax, Clojure flavored filtering and more. |
+| ![](./assets/walkable.png) | **Walkable** is a serious way to fetch data from SQL for Clojure: Datomic® pull \(Graphql-ish\) syntax, Clojure flavored filtering and more. |
 
 > Data dominates. If you’ve chosen the right data structures and organized things well, the algorithms will almost always be self-evident. Data structures, not algorithms, are central to programming. -- Rob Pike
 >
