@@ -1,0 +1,45 @@
+{
+  "gitbook": "3.x.x",
+  "title": "Walkable SQL library for Clojure",
+    "plugins": ["edit-link", "github", "github-buttons", "toggle-chapters",
+                "localized-footer", "toolbar", "anchorjs",
+                "folding-menu",
+                "mdtabs", "hints", "prism", "-highlight"
+               ],
+  "pluginsConfig": {
+    "edit-link": {
+      "base": "https://github.com/walkable-server/walkable/tree/master",
+      "label": "Edit This Page"
+    },
+    "github": {
+      "url": "https://github.com/walkable-server/walkable/"
+    },
+    "github-buttons": {
+      "buttons": [{
+        "user": "walkable-server",
+        "repo": "walkable",
+        "type": "star",
+        "size": "small",
+        "count": true
+      }]
+    },
+    "theme-api": {
+      "split": false,
+      "languages": [
+        {
+          "lang": "query",
+          "name": "Query",
+          "default": true
+        },
+        {
+          "lang": "result",
+          "name": "Result"
+        },
+        {
+          "lang": "data",
+          "name": "Data"
+        }
+      ]
+    }
+  }
+}

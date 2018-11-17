@@ -8,7 +8,7 @@ If two or more dispatch key share the same configuration, it's handy to have the
 
 instead of:
 
-```text
+```clojure
 ;; floor-plan
 {:idents {:people/all "person"
           :my-friends "person"}}
@@ -16,7 +16,7 @@ instead of:
 
 this is shorter:
 
-```text
+```clojure
 ;; floor-plan
 {:idents {[:people/all :my-friends]
           "person"}}
@@ -29,4 +29,3 @@ This also applies to keys under `:extra-conditions`, `:joins` and `:cardinality`
 Instead of specifying a fixed filters set for an ident or a join, you; can use a function that returns such filters set. The function accepts `env` as its argument.
 
 Please see [dev.clj](https://github.com/walkable-server/walkable/tree/ab05c4706867ea7cce2daa6b903ee23834e1cf7f/dev/src/dev.clj) for examples.
-

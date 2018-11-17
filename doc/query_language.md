@@ -28,14 +28,14 @@ To query for an entity's properties, use a vector of keywords denoting which pro
 
 For example, use this query
 
-```text
+```clojure
 ;; query of three prop keys:
 [:person/id :person/name :person/age]
 ```
 
 when you want to receive things like:
 
-```text
+```clojure
 ;; returned value
 {:person/id   99
  :person/name "Alice"
@@ -48,7 +48,7 @@ the thing that receives a query and returns the above is called a query resolver
 
 Sometimes you want to include another entity that has some kind of relationship with the current entity.
 
-```text
+```clojure
 ;; returned value
 {:person/friends [{:person/id   97
                    :person/name "Jon"}
@@ -66,14 +66,14 @@ Sometimes you want to include another entity that has some kind of relationship 
 
 to achieve that, the query should be:
 
-```text
+```clojure
 ;; query of three join keys:
 [:person/friends :person/mate :person/pets]
 ```
 
 which is the same as:
 
-```text
+```clojure
 ;; query
 [{:person/friends [*]}
  {:person/mate    [*]}
@@ -82,7 +82,7 @@ which is the same as:
 
 which means you let the query resolver dictate which child properties to return for each join. Or you may explicitly tell your own list:
 
-```text
+```clojure
 ;; query
 [{:person/friends [:person/id :person/name]}
  {:person/mate    [:person/id :person/name]}
@@ -105,14 +105,14 @@ Let's learn about two types of them.
 
 Some idents look just like joins:
 
-```text
+```clojure
 ;; query
 [{:my-profile [:person/name :person/age]}]
 ```
 
 of course idents can have joins, too:
 
-```text
+```clojure
 ;; query
 [{:my-profile [:person/name :person/age
                {:person/pets [:pet/name :pet/id]}]}]
@@ -124,7 +124,7 @@ Other idents look a bit weird. Instead of being a keyword, they are made of a ve
 
 First, look at the ident vector:
 
-```text
+```clojure
 ;; queries
 [:person/by-id 1]
 ;; or
@@ -135,14 +135,14 @@ First, look at the ident vector:
 
 Okay, now see them in context:
 
-```text
+```clojure
 ;; full queries
 [{[:person/by-id 1] [:person/name :person/age]}]
 ```
 
 `[:person/by-id 1]` is called the ident key. `[:person/name` and `:person/age` are the child properties.
 
-```text
+```clojure
 [{[:people-list/by-member-ids #{1 2 3}] [:person/name :person/age]}]
 ```
 
@@ -150,7 +150,7 @@ Okay, now see them in context:
 
 Allow yourself some time to grasp the syntax. Once you're comfortable, here is the above queries again with a child join added:
 
-```text
+```clojure
 ;; queries
 [{[:person/by-id 1] [:person/name :person/age
                      {:person/pets [:pet/name :pet/id]}]}]
@@ -163,7 +163,7 @@ You may notice idents also live inside a vector, which means you can have many o
 
 These two queries:
 
-```text
+```clojure
 ;; queries
 [{[:person/by-id 1] [:person/name :person/age]}]
 [{[:person/by-id 2] [:person/name :person/age]}]
@@ -171,7 +171,7 @@ These two queries:
 
 can be merged into one
 
-```text
+```clojure
 ;; query
 [{[:person/by-id 1] [:person/name :person/age]}
  {[:person/by-id 2] [:person/name :person/age]}]
@@ -179,7 +179,7 @@ can be merged into one
 
 actually, idents can stem from anywhere, like this:
 
-```text
+```clojure
 ;; query
 [{[:person/by-id 1] [:person/name :person/age
                      {[:person/by-id 2] [:person/name :person/age]}]}]
@@ -197,7 +197,7 @@ Well, the distinction is less in syntax and more in semantics. For each key, the
 
 What's a dispatch key? Let's learn to recognize them through some examples:
 
-```text
+```clojure
 |-------------------+---------------+---------------|
 | key               | type          | dispatch-key  |
 |-------------------+---------------+---------------|
@@ -217,7 +217,7 @@ There are two ways to denote parameters, the new and the legacy syntax. Let's go
 
 #### 5.1 New syntax for parameters
 
-```text
+```clojure
 ;; query
 '[:person/name :person/height]
 ;; vs modified query with params in the property `:person/height`
@@ -226,7 +226,7 @@ There are two ways to denote parameters, the new and the legacy syntax. Let's go
 
 Just like a Clojure function's list of arguments, parameters may contain zero or more items. Personally, I prefer the use of exactly one hash-map. For instance, with Walkable you can use some pre-defined parameters:
 
-```text
+```clojure
 ;; query with params `{:order-by :person/name}` added to the ident `:people/all`
 '[{(:people/all {:order-by :person/name}) [:person/name :person/age]}]
 
@@ -236,7 +236,7 @@ Just like a Clojure function's list of arguments, parameters may contain zero or
 
 Of course, someone else with a different taste may implement their query resolver to accept keyword parameters instead:
 
-```text
+```clojure
 ;; query with params `'(:offset 20 :limit 10)` added to the ident `:people/all`
 '[{(:people/all :offset 20 :limit 10) [:person/name :person/age]}]
 ;; query with params `'(:unit :cm)` in the property `:person/height`
@@ -253,7 +253,7 @@ The syntax for parameters of properties is the same.
 
 For idents and joins, you put the whole query inside a list, followed by the parameters:
 
-```text
+```clojure
 ;; query with params `{:order-by :person/name}` added to the ident `:people/all`
 '[({:people/all [:person/name :person/age]}
    {:order-by :person/name})]
@@ -270,7 +270,7 @@ Walkable can work with both new and legacy syntax for params. However the new on
 
 It's recommended to get acquainted with the query language by playing with the parser. Give some arbitrary query to `fulcro.client.primitives/query->ast` and see the output. Eg:
 
-```text
+```clojure
 (require [fulcro.client.primitives :as prim])
 
 (prim/query->ast [:foo :bar {:yup [:that]}])
@@ -282,4 +282,3 @@ It's recommended to get acquainted with the query language by playing with the p
             {:type :join, :dispatch-key :yup, :key :yup, :query [:that],
              :children [{:type :prop, :dispatch-key :that, :key :that}]}]}
 ```
-

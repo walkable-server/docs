@@ -12,7 +12,7 @@ Emitter is a `hash-map` with the following keys `:quote-marks`, `:transform-tabl
 
 There are some pre-defined emitters in `walkable.sql-query-builder.emitter` namespace, namely `sqlite-emitter`, `mysql-emitter` and `postgres-emitter`. You may make your own emitter from scratch \(which means providing all the above keywords\), but it's better to start from one of the pre-defined emitters and override your custom keys:
 
-```text
+```clojure
 (def your-emitter (merge emitter/postgres-emitter {...your customizations...}))
 ```
 
@@ -34,21 +34,20 @@ SELECT * FROM "table"
 
 You need to provide the `:quote-marks` as a vector of two strings. For example:
 
-{% tabs %}
-{% tab title="Postgres" %}
-```text
+{% mdtabs  title="Postgres" %}
+```clojure
 ;; emitter for postgres
 {:quote-marks ["\"", "\""]}
 ```
-{% endtab %}
 
-{% tab title="Mysql" %}
-```text
+
+{% mdtab title="Mysql" %}
+```clojure
 ;; emitter for mysql
 {:quote-marks ["`", "`"]}
 ```
-{% endtab %}
-{% endtabs %}
+
+{% endmdtabs %}
 
 {% hint style="warning" %}
 It's unlikely that you want to override `:quote-marks`. Keep the one from pre-defined emitters.
@@ -60,81 +59,77 @@ By default the pre-defined emitters will replace dashes `-` with underscores `_`
 
 For example if all your real table names are upper-cased \(while we all like our keywords being lower-cased\):
 
-{% tabs %}
-{% tab title="Emitter" %}
-```text
+{% mdtabs  title="Emitter" %}
+```clojure
 (def your-emitter
   (merge emitter/postgres-emitter
     {:transform-table-name (fn [table-name] (clojure.string/upper-case table-name))}))
 ```
-{% endtab %}
 
-{% tab title="Keyword" %}
+
+{% mdtab title="Keyword" %}
 `:person/name`, `:person/age`
-{% endtab %}
 
-{% tab title="Real table in database" %}
+
+{% mdtab title="Real table in database" %}
 "PERSON", as in this sql query:
 
-```text
+```clojure
 SELECT "PERSON"."name", "PERSON"."age" FROM "PERSON";
 ```
-{% endtab %}
-{% endtabs %}
+
+{% endmdtabs %}
 
 ## :rename-tables, :rename-columns
 
 Sometimes you want to specify the exact name, regardless of `:transform-table-name` / `:transform-column-name` functions:
 
-{% tabs %}
-{% tab title="Emitter" %}
-```text
+{% mdtabs  title="Emitter" %}
+```clojure
 (def your-emitter
   (merge emitter/postgres-emitter
     {:rename-tables {"person" "people"}}))
 ```
-{% endtab %}
 
-{% tab title="Keyword" %}
+
+{% mdtab title="Keyword" %}
 `:person/name`, `:person/age`
-{% endtab %}
 
-{% tab title="Real table in database" %}
+
+{% mdtab title="Real table in database" %}
 "people", as in this sql query:
 
-```text
+```clojure
 SELECT "people"."name", "people"."age" FROM "people";
 ```
-{% endtab %}
-{% endtabs %}
+
+{% endmdtabs %}
 
 ## :rename-keywords
 
 Maybe matching just the table name or the column name is not enough. You want to match the exact pair of table + column name.
 
-{% tabs %}
-{% tab title="Emitter" %}
-```text
+{% mdtabs  title="Emitter" %}
+```clojure
 (def your-emitter
   (merge emitter/postgres-emitter
     {:rename-keywords {:person/type :person/typo}}))
 ```
-{% endtab %}
 
-{% tab title="Keywords" %}
+
+{% mdtab title="Keywords" %}
 `:person/name`, `:person/type`
-{% endtab %}
 
-{% tab title="Real table+column in database" %}
+
+{% mdtab title="Real table+column in database" %}
 "person"."typo", as in this sql query:
 
-```text
+```clojure
 SELECT "person"."name", "person"."typo" FROM "person";
 ```
-{% endtab %}
-{% endtabs %}
+
+{% endmdtabs %}
 
 ## :wrap-select-strings
 
 Specific to Sqlite. It's unlikely that you want to override this. \(Doc comming soon\)
-

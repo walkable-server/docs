@@ -6,7 +6,7 @@ Any valid Walkable S-expression that evaluates to boolean \(not just some truthy
 
 ### Using filters directly in queries
 
-```text
+```clojure
 [{(:people/all {:filters [:or [:like :person/name "jon%"]
                              [:< :person/yob 1970]]})
   [:person/name :person/yob]]}
@@ -21,7 +21,7 @@ You may want to enforce filters for specific idents/joins:
 * For DRY reason: you don't want to retype the same filter set again and again.
 * For security reason: once you define some constraints to limit what the clients can access for an ident or join, they're free to play with whatever left open to them.
 
-```text
+```clojure
 ;; schema
 {:extra-conditions {:people/all [:= :person/hidden false]
 ;; any valid filter will work
@@ -34,7 +34,7 @@ You may want to enforce filters for specific idents/joins:
 
 You've seen filters used against columns of the current table. If you have defined some `:joins` in your `floor-plan`, you can also put constraints on columns of the joined tables, too.
 
-```text
+```clojure
 ;; find all people whose name starts with "jon" or whose friend's name
 ;; starts with "jon".
 [{(:people/all {:filters [:or [:like :person/name "jon%"]
@@ -43,4 +43,3 @@ You've seen filters used against columns of the current table. If you have defin
 ```
 
 You can have many such joins in filters and combine them with other expressions using `:and`/`:or`/`:not` however you like.
-

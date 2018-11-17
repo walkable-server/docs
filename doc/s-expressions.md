@@ -11,7 +11,7 @@ S-expressions is the way Walkable allow you to write arbitrary SQL expressions i
 
 ### Primitive types
 
-```text
+```clojure
 ;; expression
 123
 ;; sql output
@@ -41,7 +41,7 @@ nil
 
 > Note: The examples just use backticks as quote marks. Depending on your schema configuration, Walkable will emit SQL strings using whatever quote marks you specified.
 
-```text
+```clojure
 ;; expression
 :my-table/a-column
 ;; sql output
@@ -53,7 +53,7 @@ nil
 
 Walkable comes with some comparison operators: `:=`, `:<`, `:>`, `:<=`, `:>=`. They will result in SQL operators with the same name, but also handle multiple arity mimicking their Clojure equivalents.
 
-```text
+```clojure
 ;; expression
 [:= 1 2]
 ;; sql output
@@ -87,7 +87,7 @@ Walkable comes with some comparison operators: `:=`, `:<`, `:>`, `:<=`, `:>=`. T
 
 String comparison operators: `=`, `like`, `match`, `glob`:
 
-```text
+```clojure
 ;; expression
 [:= "hello" "hi"]
 ;; sql output
@@ -103,7 +103,7 @@ String comparison operators: `=`, `like`, `match`, `glob`:
 
 Use them on some columns, too:
 
-```text
+```clojure
 ;; expression
 [:= :my-table/its-column "hi"]
 ;; sql output
@@ -115,7 +115,7 @@ Use them on some columns, too:
 
 Basic math operators work just like their Clojure equivalents: `:+`, `:-`, `:*`, `:/`:
 
-```text
+```clojure
 ;; expression
 [:+ 1 2 4 8]
 ;; sql output
@@ -125,7 +125,7 @@ Basic math operators work just like their Clojure equivalents: `:+`, `:-`, `:*`,
 
 Feel free to mix them
 
-```text
+```clojure
 ;; expression
 [:+ [:*] [:* 2 4 7] [:/ 0.25]]
 ;; sql output
@@ -137,7 +137,7 @@ Feel free to mix them
 
 ### String manipulation
 
-```text
+```clojure
 ;; expression
 [:str "hello " nil "world" 123]
 ;; sql output
@@ -161,7 +161,7 @@ Feel free to mix them
 
 Use the `:cast` operator:
 
-```text
+```clojure
 ;; expression
 [:cast "2" :integer]
 ;; sql output
@@ -179,7 +179,7 @@ Use the `:cast` operator:
 
 `:and` and `:or` accept many arguments like in Clojure:
 
-```text
+```clojure
 ;; expression
 [:and true true false]
 ;; sql output
@@ -201,7 +201,7 @@ Use the `:cast` operator:
 
 `:not` accepts exactly one argument:
 
-```text
+```clojure
 ;; expression
 [:not true]
 ;; sql output
@@ -211,7 +211,7 @@ Use the `:cast` operator:
 
 Party time! Mix them as you wish:
 
-```text
+```clojure
 ;; expression
 [:and [:= 4 [:* 2 2]] [:not [:> 1 2]] [:or [:= 2 3] [:= 4 4]]]
 ;; sql output
@@ -221,7 +221,7 @@ Party time! Mix them as you wish:
 
 Please note that Walkable S-expressions are translated directly to SQL equivalent. Your DBMS may throw an exception if you ask for this:
 
-```text
+```clojure
 ;; expression
 [:or 2 true]
 ;; sql output
@@ -231,7 +231,7 @@ Please note that Walkable S-expressions are translated directly to SQL equivalen
 
 Don't be surprised if you see `[:not nil]` is ... `nil`!
 
-```text
+```clojure
 ;; expression
 [:not nil]
 ;; sql output
@@ -243,7 +243,7 @@ Don't be surprised if you see `[:not nil]` is ... `nil`!
 
 `:when`, `:if`, `:case` and `:cond` look like in Clojure...
 
-```text
+```clojure
 ;; expression
 [:when true "yay"] ;; or [:if true "yay"]
 ;; sql output
@@ -277,7 +277,7 @@ Don't be surprised if you see `[:not nil]` is ... `nil`!
 
 ...except the fact that you must supply real booleans to them, not just some truthy values.
 
-```text
+```clojure
 ;; expression
 [:cond
  [:= 0 1]
@@ -297,7 +297,7 @@ Don't be surprised if you see `[:not nil]` is ... `nil`!
 
 In your schema you can define so-called pseudo columns that look just like normal columns from client-side view:
 
-```text
+```clojure
 ;; schema
 ;; :person/yob is a real column
 {:pseudo-columns {:person/age [:- 2018 :person/yob]}}
@@ -305,7 +305,7 @@ In your schema you can define so-called pseudo columns that look just like norma
 
 You can't tell the difference from client-side:
 
-```text
+```clojure
 ;; query for a real column
 [{[:person/by-id 9]
   [:person/yob]}]
@@ -325,7 +325,7 @@ Behind the scenes, Walkable will expand the pseudo columns to whatever they are 
 
 Please note you can only use true columns from the same table in the definition of pseudo columns. For instance, the following doesn't make sense:
 
-```text
+```clojure
 ;; schema
 {:pseudo-columns {:person/age [:- 2018 :pet/yob]}}
 ```
@@ -344,7 +344,7 @@ Todo: more docs.
 
 The following expressions work in Postgresql:
 
-```text
+```clojure
 ;; expression
 [:= 1
  [:cast [:get-as-text [:jsonb {:a 1}] "a"] :integer]]
@@ -366,4 +366,3 @@ AS q"
     "{\"a\":1,\"b\":2}" "{\"a\":1}" "{\"a\":1,\"b\":2}" "a"])
 ;; => [{:q true}]
 ```
-

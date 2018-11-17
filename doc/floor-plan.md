@@ -18,14 +18,14 @@ Idents are the root of all queries. From an SQL dbms perspective, you must start
 
 Keyword idents can be defined as simple as:
 
-```text
+```clojure
 ;; schema
 {:idents {:people/all "person"}}
 ```
 
 so queries like:
 
-```text
+```clojure
 [:people/all [:person/id :person/name]]
 ```
 
@@ -41,7 +41,7 @@ These are idents whose key implies some condition. Instead of providing just the
 
 For example, the following vector ident:
 
-```text
+```clojure
 ;; dispatch-key: `:person/by-id`
 ;; ident arguments: `1`
 [:person/by-id 1]
@@ -49,14 +49,14 @@ For example, the following vector ident:
 
 will require a floor-plan like:
 
-```text
+```clojure
 ;; floor-plan
 {:idents {:person/by-id :person/id}}
 ```
 
 so queries like:
 
-```text
+```clojure
 ;; query
 [[:person/by-id 1] [:person/id :person/name]]
 ```
@@ -77,7 +77,7 @@ Let's see some examples.
 
 Assume table `cow` contains:
 
-```text
+```clojure
 |----+-------|
 | id | color |
 |----+-------|
@@ -88,7 +88,7 @@ Assume table `cow` contains:
 
 and table `farmer` has:
 
-```text
+```clojure
 |----+------+--------|
 | id | name | cow_id |
 |----+------+--------|
@@ -99,7 +99,7 @@ and table `farmer` has:
 
 and you want to get a farmer along with their cow using the query:
 
-```text
+```clojure
 ;; query
 [{[:farmer/by-id 1] [:farmer/name {:farmer/cow [:cow/id :cow/color]}]}]
 ```
@@ -108,7 +108,7 @@ and you want to get a farmer along with their cow using the query:
 
 then you must define the join "path" like this:
 
-```text
+```clojure
 ;; floor-plan
 {:joins {:farmer/cow [:farmer/cow-id :cow/id]}}
 ```
@@ -129,7 +129,7 @@ SELECT `cow`.`id`, `cow`.`color` FROM `cow` WHERE `cow`.`id` = 10
 
 Finally, Walkable will combine the results of the above SQL queries and return the final result:
 
-```text
+```clojure
 {[:farmer/by-id 1] #:farmer{:number 1,
                             :name "jon",
                             :cow #:cow{:index 10,
@@ -142,7 +142,7 @@ Assume the following tables:
 
 source table `person`:
 
-```text
+```clojure
 |----+------|
 | id | name |
 |----+------|
@@ -153,7 +153,7 @@ source table `person`:
 
 target table `pet`:
 
-```text
+```clojure
 |----+--------|
 | id | name   |
 |----+--------|
@@ -165,7 +165,7 @@ target table `pet`:
 
 join table `person_pet`:
 
-```text
+```clojure
 |-----------+--------+---------------|
 | person_id | pet_id | adoption_year |
 |-----------+--------+---------------|
@@ -177,13 +177,13 @@ join table `person_pet`:
 
 you may query for a person and their pets along with their adoption year
 
-```text
+```clojure
 [{[:person/by-id 1] [:person/name {:person/pets [:pet/name :person-pet/adoption-year]}]}]
 ```
 
 then the `:joins` part of our floor-plan is as simple as:
 
-```text
+```clojure
 ;; schema
 {:joins {:person/pets [:person/id :person-pet/person-id
                        :person-pet/pet-id :pet/id]}}
@@ -204,7 +204,7 @@ FROM `person_pet` JOIN `pet` ON `person_pet`.`pet_id` = `pet`.`id` WHERE `person
 
 and our not-so-atonishing result:
 
-```text
+```clojure
 ;; result
 {[:person/by-id 1] #:person{:id 1,
                             :name "jon",
@@ -222,7 +222,7 @@ No big deal. This is no more difficult than example 1.
 
 Assume table `farmer` contains:
 
-```text
+```clojure
 |----+-------|
 | id | name  |
 |----+-------|
@@ -233,7 +233,7 @@ Assume table `farmer` contains:
 
 and table `cow` has:
 
-```text
+```clojure
 |----+-------+----------|
 | id | name  | owner_id |
 |----+-------+----------|
@@ -250,7 +250,7 @@ A handy way to avoid typing a join whose path is just reversed version of anothe
 
 The floor-plan for such a join is straightforward:
 
-```text
+```clojure
 ;; floor-plan
 {:joins          {:farmer/cow [:farmer/cow-id :cow/id]}
  :reversed-joins {:cow/owner :farmer/cow}}
@@ -258,7 +258,7 @@ The floor-plan for such a join is straightforward:
 
 so you can go both ways:
 
-```text
+```clojure
 ;; queries:
 
 ;; - find the cow of a given farmer
@@ -274,7 +274,7 @@ Also, another reason to use `:reversed-joins` is that it helps with semantics.
 
 A set of available columns must be provided at compile time so Walkable can pre-compute part of SQL query strings.
 
-```text
+```clojure
 ;; floor-plan
 {:columns #{:farmer/name
             :cow/color}}
@@ -296,7 +296,7 @@ On the other hand, you don't have to include every single column in your databas
 
 Idents and joins can have cardinality of either `:many` \(which is default\) or `:one`. You declare that by their dispatch keys:
 
-```text
+```clojure
 ;; floor-plan
 {:cardinality {:person/by-id :one
                ;; you can skip all `:many`!
@@ -324,7 +324,7 @@ Please see [example.clj](https://github.com/walkable-server/walkable/tree/ab05c4
 * `derive-attributes` which calculates `:pet/age` and `:person/age` from `:pet/yob` and `:person/yob` respectively.
 * required inputs for `:pet/age` and `:person/age` in `:required-columns`:
 
-```text
+```clojure
 ;; floor-plan
 {:required-columns {:pet/age    #{:pet/yob}
                     :person/age #{:person/yob}}}
@@ -333,4 +333,3 @@ Please see [example.clj](https://github.com/walkable-server/walkable/tree/ab05c4
 ## 9 :pseudo-columns
 
 Please see [dev.clj](https://github.com/walkable-server/walkable/tree/ab05c4706867ea7cce2daa6b903ee23834e1cf7f/dev/src/dev.clj) for examples.
-

@@ -10,8 +10,7 @@
 
 Ever imagined sending queries like this to your SQL database?
 
-{% tabs %}
-{% tab title="Query" %}
+{% mdtabs title="Query" %}
 ```clojure
 [{[:person/by-id 1]
   [:person/id
@@ -19,9 +18,9 @@ Ever imagined sending queries like this to your SQL database?
    :person/age
    {:person/pet [:pet/name :pet/favorite-location]}]}]
 ```
-{% endtab %}
 
-{% tab title="Data" %}
+
+{% mdtab title="Data" %}
 ### Table "person":
 
 | id | name | age |
@@ -42,9 +41,9 @@ Ever imagined sending queries like this to your SQL database?
 | :---: | :---: |
 | 1 | 10 |
 | 2 | 20 |
-{% endtab %}
 
-{% tab title="Result" %}
+
+{% mdtab title="Result" %}
 ```clojure
 {[:person/by-id 1]
  {:person/id   1
@@ -53,13 +52,12 @@ Ever imagined sending queries like this to your SQL database?
   {:person/pet {:pet/name              "Tom"
                 :pet/favorite-location "garden"}}}}
 ```
-{% endtab %}
-{% endtabs %}
+
+{% endmdtabs %}
 
 or a bit more sophisticated:
 
-{% tabs %}
-{% tab title="Query" %}
+{% mdtabs title="Query" %}
 ```clojure
 `[{(:articles/all {:filters [:and [:= false :article/hidden]
                              {:article/author [:= :user/username "lucy"]}]})
@@ -67,9 +65,9 @@ or a bit more sophisticated:
     :article/created-date
     {:article/author [:user/id :user/username :user/karma]}]}]
 ```
-{% endtab %}
 
-{% tab title="Data" %}
+
+{% mdtab title="Data" %}
 ### Table "article":
 
 | id | title | author\_id | hidden | created\_date |
@@ -84,9 +82,9 @@ or a bit more sophisticated:
 | :---: | :--- | :---: |
 | 10 | mark | 21 |
 | 20 | lucy | 42 |
-{% endtab %}
 
-{% tab title="Result" %}
+
+{% mdtab title="Result" %}
 ```clojure
 [{:articles/all
   [{:article/title        "Welcome"
@@ -95,8 +93,8 @@ or a bit more sophisticated:
                       :user/username "lucy"
                       :user/karma    42}}}]}]
 ```
-{% endtab %}
-{% endtabs %}
+
+{% endmdtabs %}
 
 Yes, you can. Have your data fetched in your Clojure mission critical app with confidence. Even more, build the query part of a fulcro server or REST api in minutes today! Call it from your Clojurescript app without worrying about SQL injection.
 
@@ -361,4 +359,3 @@ I'm available for questions regarding walkable on `#walkable` clojurians slack c
 Copyright © 2018 Hoàng Minh Thắng
 
 Datomic® is a registered trademark of Cognitect, Inc.
-

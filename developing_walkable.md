@@ -18,36 +18,35 @@ Walkabe source code comes with three Leiningen profiles for three supported sql 
 
 To begin developing, start with a REPL.
 
-{% tabs %}
-{% tab title="Postgres" %}
-```text
+{% mdtabs  title="Postgres" %}
+```clojure
 lein with-profile postgres repl
 ```
-{% endtab %}
 
-{% tab title="Mysql" %}
-```text
+
+{% mdtab title="Mysql" %}
+```clojure
 lein with-profile mysql repl
 ```
-{% endtab %}
 
-{% tab title="Sqlite" %}
-```text
+
+{% mdtab title="Sqlite" %}
+```clojure
 lein with-profile sqlite repl
 ```
-{% endtab %}
-{% endtabs %}
+
+{% endmdtabs %}
 
 Then load the development environment.
 
-```text
+```clojure
 user=> (dev)
 :loaded
 ```
 
 Run `go` to initiate the system.
 
-```text
+```clojure
 dev=> (go)
 :duct.server.http.jetty/starting-server {:port 3000}
 :initiated
@@ -57,7 +56,7 @@ By default this creates a web server at [http://localhost:3000](http://localhost
 
 When you make changes to your source files, use `reset` to reload any modified files and reset the server.
 
-```text
+```clojure
 dev=> (reset)
 :reloading (...)
 :resumed
@@ -67,8 +66,7 @@ dev=> (reset)
 
 Testing is fastest through the REPL, as you avoid environment startup time.
 
-```text
+```clojure
 dev=> (test)
 ...
 ```
-
