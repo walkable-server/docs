@@ -36,7 +36,6 @@
       "search-placeholder":"your query",
       "search-btn": "Search",
       "anchor-selector": "h1, h2",
-      "logo":"./assets/walkable.png",
       "favicon": "./favicon.ico"
     }
   }
