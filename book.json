@@ -2,7 +2,10 @@
   "gitbook": "3.x.x",
   "title": "Walkable SQL library for Clojure",
     "plugins": ["edit-link", "github", "github-buttons", "toggle-chapters",
-                "-fontsettings",
+                "theme-fexa@git+git@github.com:walkable-server/gitbook-plugin-theme-fexa.git",
+                "back-to-top-button", "copy-code-button",
+                "cuav-chapters", "heading-anchors",
+                "-fontsettings", "-sharing",
                 "localized-footer", "toolbar", "anchorjs",
                 "folding-menu",
                 "mdtabs", "hints", "prism", "-highlight"
@@ -29,23 +32,12 @@
         "prismjs/themes/prism-tomorrow.css"
       ]
     },
-    "theme-api": {
-      "split": false,
-      "languages": [
-        {
-          "lang": "query",
-          "name": "Query",
-          "default": true
-        },
-        {
-          "lang": "result",
-          "name": "Result"
-        },
-        {
-          "lang": "data",
-          "name": "Data"
-        }
-      ]
+    "theme-fexa":{
+      "search-placeholder":"your query",
+      "search-btn": "Search",
+      "anchor-selector": "h1, h2",
+      "logo":"./.gitbook/assets/walkable.png",
+      "favicon": "./favicon.ico"
     }
   }
 }
