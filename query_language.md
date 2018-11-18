@@ -1,28 +1,29 @@
-# Graph Query Syntax
-
-Walkable uses a graph query language to describe what data you want from your SQL DBMS. The query language was inspired by Datomic's [Pull API](https://docs.datomic.com/on-prem/pull.html) and [Graphql](https://graphql.org/) and first introduced in \[om.next\]\([https://github.com/omcljs/om/wiki/Documentation-\(om.next](https://github.com/omcljs/om/wiki/Documentation-%28om.next)\)\). However, you don't have to use om.next \(or its fork, [Fulcro](https://github.com/fulcrologic/fulcro)\) to make use of the query language.
-
-> If you're familiar with building apps with om.next/fulcro, please note: you often specify a query for each component and compose them up. From server-side perspective \(which is that of Walkable's\), you don't know \(or care\) about those query fragments: you just return the right data in the right shape for the big final top-level query. The reconciler in the client-side will build up the query and break down the result.
->
-> If you know GraphQL, then two main differences between the two query languages are:
->
-> * GraphQL is built atop strings, in constrast with Clojure's rich
->
->     data structure used by our query language.
->
-> * om.next query encourages the use of namespaced \(aka qualified\)
->
->     keywords. In fact, you _must_ use namespaced keywords with
->
->     Walkable so it can infer which column is from which table. For
->
->     instance, `:people/id` means the column `id` in the table
->
->     `people`.
-
 ## Elements of the query language
 
-### 1. Properties
+Walkable uses a graph query language to describe what data you want
+from your SQL DBMS. The query language was inspired by Datomic's [Pull
+API](https://docs.datomic.com/on-prem/pull.html) and
+[Graphql](https://graphql.org/) and first introduced in
+[om.next](https://github.com/omcljs/om/). However, you don't have to
+use om.next \(or its fork,
+[Fulcro](https://github.com/fulcrologic/fulcro)\) to make use of the
+query language.
+
+{% hint style="info" %}
+If you're familiar with building apps with om.next/fulcro, please note: you often specify a query for each component and compose them up. From server-side perspective \(which is that of Walkable's\), you don't know \(or care\) about those query fragments: you just return the right data in the right shape for the big final top-level query. The reconciler in the client-side will build up the query and break down the result.
+{% endhint %}
+
+{% hint style="info" %}
+If you know GraphQL, then two main differences between the two query languages are:
+
+* GraphQL is built atop strings, in constrast with Clojure's rich data
+  structure used by our query language.
+
+* om.next query encourages the use of namespaced \(aka qualified\) keywords. In fact, you _must_ use namespaced keywords with Walkable so it can infer which column is from which table. For instance, `:people/id` means the column `id` in the table `people`.
+
+{% endhint %}
+
+## 1. Properties
 
 To query for an entity's properties, use a vector of keywords denoting which properties you're asking for.
 
@@ -44,7 +45,7 @@ when you want to receive things like:
 
 the thing that receives a query and returns the above is called a query resolver \(or simply "query parser" in Om.next, Fulcro and Pathom's documentation\).
 
-### 2. Joins
+## 2. Joins
 
 Sometimes you want to include another entity that has some kind of relationship with the current entity.
 
@@ -93,7 +94,7 @@ Wait, isn't this list the vector syntax I've learned in Properties section? Yup.
 
 You may also notice that the query syntax is the same for to-many relationships \(ie `:person/friends` and `:person/pets`\) as well as to-one one \(`:person/mate`\). Well, the query resolver, which owns the data, will decide if it will return an item \(as a map\) or a vector of zero or more such item.
 
-### 3. Idents
+## 3. Idents
 
 Actually the properties and joins above can't stand alone themselves. They must stem from somewhere: enter idents. Idents are the root of all queries \(or the root of all **evals** :D\)
 
@@ -101,7 +102,7 @@ Actually the properties and joins above can't stand alone themselves. They must 
 
 Let's learn about two types of them.
 
-#### 3.1 Keyword idents
+### 3.1 Keyword idents
 
 Some idents look just like joins:
 
@@ -118,7 +119,7 @@ of course idents can have joins, too:
                {:person/pets [:pet/name :pet/id]}]}]
 ```
 
-#### 3.2 Vector idents
+### 3.2 Vector idents
 
 Other idents look a bit weird. Instead of being a keyword, they are made of a vector of a keyword indicating the entity type followed by exactly one argument specifying how to identify those entities.
 
@@ -189,7 +190,7 @@ Here `[:person/by-id 2]` looks just like a child join \(such as `:person/mate`, 
 
 Todo: sample results from each query above.
 
-### 4. Key vs dispatch key
+## 4. Key vs dispatch key
 
 After reading about properties vs joins vs idents, you may think: "This doesn't make sense! If an ident can sometimes look like a join, and a join can sometimes look like a property, then what's the point of defining a syntax at all?
 
@@ -207,7 +208,7 @@ What's a dispatch key? Let's learn to recognize them through some examples:
 |-------------------+---------------+---------------|
 ```
 
-### 5. Parameters
+## 5. Parameters
 
 Sometimes you want the query resolver to modify a little bit of the data. Parameters are the piece to communicate just that.
 
@@ -215,7 +216,7 @@ Sometimes you want the query resolver to modify a little bit of the data. Parame
 
 There are two ways to denote parameters, the new and the legacy syntax. Let's go for the new one first.
 
-#### 5.1 New syntax for parameters
+### 5.1 New syntax for parameters
 
 ```clojure
 ;; query
@@ -245,7 +246,7 @@ Of course, someone else with a different taste may implement their query resolve
 
 That's valid syntax, too.
 
-#### 5.2 Legacy syntax for parameters
+### 5.2 Legacy syntax for parameters
 
 > This section is required only if you're a user of om.next or fulcro older than v2.2.1. Feel free to skip it otherwise.
 
@@ -266,7 +267,8 @@ These can be quite hard for human to follow if some child join also have paramet
 
 Walkable can work with both new and legacy syntax for params. However the new one is only supported as of fulcro 2.2.1. If you're using om.next or older fulcro, you must use the legacy syntax otherwise your client-side app will crash.
 
-## Practise
+{% hint style="info" %}
+### Practise
 
 It's recommended to get acquainted with the query language by playing with the parser. Give some arbitrary query to `fulcro.client.primitives/query->ast` and see the output. Eg:
 
@@ -282,3 +284,4 @@ It's recommended to get acquainted with the query language by playing with the p
             {:type :join, :dispatch-key :yup, :key :yup, :query [:that],
              :children [{:type :prop, :dispatch-key :that, :key :that}]}]}
 ```
+{% endhint %}
