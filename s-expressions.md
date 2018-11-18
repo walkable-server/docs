@@ -1,284 +1,532 @@
-# S-expressions
+# A tour of Walkable S-expressions
 
 S-expressions is the way Walkable allow you to write arbitrary SQL expressions in your [paredit](https://github.com/clojure-emacs/cider)/[parinfer](https://github.com/shaunlebron/parinfer)-[powered](https://github.com/tpope/vim-fireplace) [editors](https://cursive-ide.com/) without compromising security.
 
-## A tour of Walkable S-expressions
+{% hint style="info" %}
 
-> Note about SQL examples:
+Note about SQL examples:
 
 * S-expressions can end up as SQL strings in either `SELECT` statements or `WHERE` conditions. For demonstrating purpose, the strings are wrapped in `SELECT ... as q` so the SQL outputs are executable, except ones with tables and columns.
 * SQL output may differ when you `require` different implementations \(ie `(require 'walkable.sql-query-builder.impl.postgres)` vs `(require 'walkable.sql-query-builder.impl.sqlite)`\).
 
-### Primitive types
+{% endhint %}
 
-```clojure
-;; expression
+## Primitive types
+
+{% mdtabs title="S-expression" %}
+``` clojure
 123
-;; sql output
+```
+{% mdtab title="SQL output" %}
+``` clojure
 (jdbc/query your-db ["SELECT 123 AS q"])
-;; => [{:q 123}]
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q 123}]
+```
+{% endmdtabs %}
 
-;; expression
+{% mdtabs title="S-expression" %}
+``` clojure
 nil
-;; sql output
+```
+{% mdtab title="SQL output" %}
+``` clojure
 (jdbc/query your-db ["SELECT NULL AS q"])
-;; => [{:q nil}]
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q nil}]
 
-;; expression
+```
+{% endmdtabs %}
+
+{% mdtabs title="S-expression" %}
+``` clojure
 "hello world"
-;; sql output
+```
+{% mdtab title="SQL output" %}
+``` clojure
 (jdbc/query your-db ["SELECT ? AS q" "hello world"])
-;; => {:q "hello world"}
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q "hello world"}]
+```
+{% endmdtabs %}
 
-;; expression
+{% mdtabs title="S-expression" %}
+``` clojure
 "hello\"; DROP TABLE users"
-;; sql output
+```
+{% mdtab title="SQL output" %}
+``` clojure
 (jdbc/query your-db ["SELECT ? AS q" "hello\"; DROP TABLE users"])
-;; => {:q "hello\"; DROP TABLE users"}
 ```
+{% mdtab title="result" %}
+``` clojure
+[{:q "hello\"; DROP TABLE users"}]
+```
+{% endmdtabs %}
 
-### Columns
+## Columns
 
-> Note: The examples just use backticks as quote marks. Depending on your emitter configuration, Walkable will emit SQL strings using whatever quote marks you specified.
+{% hint style="info" %}
+Note
 
-```clojure
-;; expression
+The examples just use backticks as quote marks. Depending on your
+emitter configuration, Walkable will emit SQL strings using whatever
+quote marks you specified.
+
+{% endhint %}
+
+{% mdtabs title="S-expression" %}
+``` clojure
 :my-table/a-column
-;; sql output
+```
+{% mdtab title="SQL output" %}
+``` clojure
 (jdbc/query your-db ["SELECT `my_table`.`a_column` AS `my-table/a-column` FROM `my_table`"])
-;; => [{:my-table/a-column 42}, ...other records...]
 ```
+{% mdtab title="result" %}
+``` clojure
+[{:my-table/a-column 42}, ...other records...]
 
-### Comparison
+```
+{% endmdtabs %}
 
-Walkable comes with some comparison operators: `:=`, `:<`, `:>`, `:<=`, `:>=`. They will result in SQL operators with the same name, but also handle multiple arity mimicking their Clojure equivalents.
+## Comparison
 
-```clojure
-;; expression
+Walkable comes with some comparison operators: `:=`, `:<`, `:>`,
+`:<=`, `:>=`. They will result in SQL operators with the same name,
+but also handle multiple arity mimicking their Clojure equivalents.
+
+{% mdtabs title="S-expression" %}
+``` clojure
 [:= 1 2]
-;; sql output
-(jdbc/query your-db ["SELECT (1 = 2) AS q"])
-;; => [{:q false}]
-
-;; expression
-[:<= 1 2]
-;; sql output
-(jdbc/query your-db ["SELECT (1 <= 2) AS q"])
-;; => [{:q true}]
-
-;; expression
-[:< 1 2 3 1]
-;; sql output
-(jdbc/query your-db ["SELECT ((1 < 2) AND (2 < 3) AND (3 < 1)) AS q"])
-;; => [{:q false}]
-
-;; expression
-[:= 0]
-;; sql output
-(jdbc/query your-db ["SELECT true AS q"])
-;; => [{:q true}]
-
-;; expression
-[:>= 1000]
-;; sql output
-(jdbc/query your-db ["SELECT true AS q"])
-;; => [{:q true}]
 ```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT (1 = 2) AS q"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q false}]
+
+```
+{% endmdtabs %}
+
+{% mdtabs title="S-expression" %}
+``` clojure
+[:<= 1 2]
+```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT (1 <= 2) AS q"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q true}]
+
+```
+{% endmdtabs %}
+
+{% mdtabs title="S-expression" %}
+``` clojure
+[:< 1 2 3 1]
+```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT ((1 < 2) AND (2 < 3) AND (3 < 1)) AS q"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q false}]
+```
+{% endmdtabs %}
+
+{% mdtabs title="S-expression" %}
+``` clojure
+[:= 0]
+```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT true AS q"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q true}]
+```
+{% endmdtabs %}
+
+{% mdtabs title="S-expression" %}
+``` clojure
+[:>= 1000]
+```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT true AS q"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q true}]
+```
+{% endmdtabs %}
 
 String comparison operators: `=`, `like`, `match`, `glob`:
 
-```clojure
-;; expression
+{% mdtabs title="S-expression" %}
+``` clojure
 [:= "hello" "hi"]
-;; sql output
-(jdbc/query your-db ["SELECT (? = ?) AS q" "hello" "hi"])
-;; => [{:q false}]
-
-;; expression
-[:like "abcd" "abc%"]
-;; sql output
-(jdbc/query your-db ["SELECT (? LIKE ?) AS q" "abcd" "abc%"])
-;; => [{:q true}]
 ```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT (? = ?) AS q" "hello" "hi"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q false}]
+```
+{% endmdtabs %}
+
+{% mdtabs title="S-expression" %}
+``` clojure
+[:like "abcd" "abc%"]
+```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT (? LIKE ?) AS q" "abcd" "abc%"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q true}]
+```
+{% endmdtabs %}
 
 Use them on some columns, too:
 
-```clojure
-;; expression
+{% mdtabs title="S-expression" %}
+``` clojure
 [:= :my-table/its-column "hi"]
-;; sql output
-(jdbc/query your-db ["SELECT (`my_table`.`its_column` = ?) AS q FROM `my_table`" "hi"])
-;; => [{:q true}]
 ```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT (`my_table`.`its_column` = ?) AS q FROM `my_table`" "hi"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q true}]
+```
+{% endmdtabs %}
 
-### Math
+## Math
 
 Basic math operators work just like their Clojure equivalents: `:+`, `:-`, `:*`, `:/`:
 
-```clojure
-;; expression
+{% mdtabs title="S-expression" %}
+``` clojure
 [:+ 1 2 4 8]
-;; sql output
+```
+{% mdtab title="SQL output" %}
+``` clojure
 (jdbc/query your-db ["SELECT (1 + 2 + 4 + 8) AS q"])
-;; => [{:q 15}]
 ```
+{% mdtab title="result" %}
+``` clojure
+[{:q 15}]
+```
+{% endmdtabs %}
 
-Feel free to mix them
+Feel free to mix them:
 
-```clojure
-;; expression
+{% mdtabs title="S-expression" %}
+``` clojure
 [:+ [:*] [:* 2 4 7] [:/ 0.25]]
-;; sql output
+```
+{% mdtab title="SQL output" %}
+``` clojure
 (jdbc/query your-db ["SELECT (1 + (2 * 4 * 7) + (1/0.25)) AS q"])
-;; => [{:q 61.0}]
 ```
+{% mdtab title="result" %}
+``` clojure
+[{:q 61.0}]
+```
+{% endmdtabs %}
 
-\(`:*` with no argument result in `1`\)
+{% hint style="info" %}
+`:*` with no argument result in `1`
+{% endhint %}
 
-### String manipulation
+## String manipulation
 
-```clojure
-;; expression
+{% mdtabs title="S-expression" %}
+``` clojure
 [:str "hello " nil "world" 123]
-;; sql output
+```
+{% mdtab title="SQL output" %}
+``` clojure
 (jdbc/query your-db ["SELECT (CONCAT(?, NULL, ?, 123) AS q" "hello " "world"])
-;; => [{:q "hello world123"}]
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q "hello world123"}]
+```
+{% endmdtabs %}
 
-;; expression
+{% mdtabs title="S-expression" %}
+``` clojure
 [:subs "hello world"]
-;; sql output
-(jdbc/query your-db ["SELECT (CONCAT(?, NULL, ?, 123) AS q" "hello " "world"])
-;; => [{:q "hello world123"}]
-
-;; expression
-[:str "hello " nil "world" 123]
-;; sql output
-(jdbc/query your-db ["SELECT (CONCAT(?, NULL, ?, 123) AS q" "hello " "world"])
-;; => [{:q "hello world123"}]
 ```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT (CONCAT(?, NULL, ?, 123) AS q" "hello " "world"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q "hello world123"}]
+```
+{% endmdtabs %}
 
-### Conversion between types
+{% mdtabs title="S-expression" %}
+``` clojure
+[:str "hello " nil "world" 123]
+```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT (CONCAT(?, NULL, ?, 123) AS q" "hello " "world"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q "hello world123"}]
+```
+{% endmdtabs %}
+
+## Conversion between types
 
 Use the `:cast` operator:
 
-```clojure
-;; expression
+{% mdtabs title="S-expression" %}
+``` clojure
 [:cast "2" :integer]
-;; sql output
-(jdbc/query your-db ["SELECT CAST(? as INTEGER) AS q" "2"])
-;; => [{:q 2}]
-
-;; expression
-[:cast 3 :text]
-;; sql output
-(jdbc/query your-db ["SELECT CAST(3 as TEXT) AS q"])
-;; => [{:q "3"}]
 ```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT CAST(? as INTEGER) AS q" "2"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q 2}]
+```
+{% endmdtabs %}
 
-### Logic constructs
+{% mdtabs title="S-expression" %}
+``` clojure
+[:cast 3 :text]
+```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT CAST(3 as TEXT) AS q"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q "3"}]
+```
+{% endmdtabs %}
+
+## Logic constructs
 
 `:and` and `:or` accept many arguments like in Clojure:
 
-```clojure
-;; expression
+{% mdtabs title="S-expression" %}
+``` clojure
 [:and true true false]
-;; sql output
-(jdbc/query your-db ["SELECT (true AND true AND false) AS q"])
-;; => [{:q false}]
-
-;; expression
-[:and]
-;; sql output
-(jdbc/query your-db ["SELECT (true) AS q"])
-;; => [{:q true}]
-
-;; expression
-[:or]
-;; sql output
-(jdbc/query your-db ["SELECT (NULL) AS q"])
-;; => [{:q nil}]
 ```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT (true AND true AND false) AS q"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q false}]
+```
+{% endmdtabs %}
+
+{% mdtabs title="S-expression" %}
+``` clojure
+[:and]
+```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT (true) AS q"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q true}]
+```
+{% endmdtabs %}
+
+{% mdtabs title="S-expression" %}
+``` clojure
+[:or]
+```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT (NULL) AS q"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q nil}]
+```
+{% endmdtabs %}
 
 `:not` accepts exactly one argument:
 
-```clojure
-;; expression
+{% mdtabs title="S-expression" %}
+``` clojure
 [:not true]
-;; sql output
-(jdbc/query your-db ["SELECT (NOT true) AS q"])
-;; => [{:q false}]
 ```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT (NOT true) AS q"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q false}]
+```
+{% endmdtabs %}
 
 Party time! Mix them as you wish:
 
-```clojure
-;; expression
+{% mdtabs title="S-expression" %}
+``` clojure
 [:and [:= 4 [:* 2 2]] [:not [:> 1 2]] [:or [:= 2 3] [:= 4 4]]]
-;; sql output
+```
+{% mdtab title="SQL output" %}
+``` clojure
 (jdbc/query your-db ["SELECT (((4)=((2)*(2))) AND (NOT ((1)>(2))) AND (((2)=(3)) OR ((4)=(4)))) AS q"])
-;; => [{:q true}]
 ```
+{% mdtab title="result" %}
+``` clojure
+[{:q true}]
+```
+{% endmdtabs %}
 
-Please note that Walkable S-expressions are translated directly to SQL equivalent. Your DBMS may throw an exception if you ask for this:
+{% hint style="warning" %}
+Please note that Walkable S-expressions are translated directly to SQL
+equivalent. Your DBMS may throw an exception if you ask for this:
+{% endhint %}
 
-```clojure
-;; expression
+{% mdtabs title="S-expression" %}
+``` clojure
 [:or 2 true]
-;; sql output
+```
+{% mdtab title="SQL output" %}
+``` clojure
 (jdbc/query your-db ["SELECT (2 OR true) AS q"])
-;; =>ERROR:  argument of OR must be type boolean, not type integer
 ```
+{% mdtab title="result" %}
+``` clojure
+ERROR:  argument of OR must be type boolean, not type integer
+```
+{% endmdtabs %}
 
+{% hint style="warning" %}
 Don't be surprised if you see `[:not nil]` is ... `nil`!
+{% endhint %}
 
-```clojure
-;; expression
+{% mdtabs title="S-expression" %}
+``` clojure
 [:not nil]
-;; sql output
-(jdbc/query your-db ["SELECT (NOT NULL) AS q"])
-;; => [{:q nil}]
 ```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT (NOT NULL) AS q"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q nil}]
+```
+{% endmdtabs %}
 
-### Other constructs
+## Other constructs
 
 `:when`, `:if`, `:case` and `:cond` look like in Clojure...
 
-```clojure
-;; expression
+{% mdtabs title="S-expression" %}
+``` clojure
 [:when true "yay"] ;; or [:if true "yay"]
-;; sql output
-(jdbc/query your-db ["SELECT (CASE WHEN ( true ) THEN ( ? ) END) AS q" "yay"])
-;; => [{:q "yay"}]
-
-;; expression
-[:if [:= 1 2] "yep" "nope"]
-;; sql output
-(jdbc/query your-db ["SELECT (CASE WHEN ((1)=(2)) THEN ( ? ) ELSE ( ? ) END) AS q" "yay" "nope"])
-;; => [{:q "nope"}]
-
-;; expression
-[:case [:+ 0 1] 2 3]
-;; sql output
-(jdbc/query your-db ["SELECT (CASE (0+1) WHEN (2) THEN (3) END) AS q"])
-;; => [{:q nil}]
-
-;; expression
-[:case [:+ 0 1] 2 3 4]
-;; sql output
-(jdbc/query your-db ["SELECT (CASE (0+1) WHEN (2) THEN (3) ELSE (4) END) AS q"])
-;; => [{:q 4}]
-
-;; expression
-[:cond [:= 0 1] "wrong" [:< 2 3] "right"]
-;; sql output
-(jdbc/query your-db ["SELECT  (CASE WHEN ((0)=(1)) THEN ( ? ) WHEN ((2)<(3)) THEN ( ? ) END) AS q" "wrong" "right"])
-;; => [{:q "right"}]
 ```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT (CASE WHEN ( true ) THEN ( ? ) END) AS q" "yay"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q "yay"}]
+```
+{% endmdtabs %}
+
+{% mdtabs title="S-expression" %}
+``` clojure
+[:if [:= 1 2] "yep" "nope"]
+```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT (CASE WHEN ((1)=(2)) THEN ( ? ) ELSE ( ? ) END) AS q" "yay" "nope"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q "nope"}]
+```
+{% endmdtabs %}
+
+{% mdtabs title="S-expression" %}
+``` clojure
+[:case [:+ 0 1] 2 3]
+```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT (CASE (0+1) WHEN (2) THEN (3) END) AS q"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q nil}]
+```
+{% endmdtabs %}
+
+{% mdtabs title="S-expression" %}
+``` clojure
+[:case [:+ 0 1] 2 3 4]
+```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT (CASE (0+1) WHEN (2) THEN (3) ELSE (4) END) AS q"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q 4}]
+```
+{% endmdtabs %}
+
+{% mdtabs title="S-expression" %}
+``` clojure
+[:cond [:= 0 1] "wrong" [:< 2 3] "right"]
+```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT  (CASE WHEN ((0)=(1)) THEN ( ? ) WHEN ((2)<(3)) THEN ( ? ) END) AS q" "wrong" "right"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q "right"}]
+```
+{% endmdtabs %}
 
 ...except the fact that you must supply real booleans to them, not just some truthy values.
 
-```clojure
-;; expression
+{% mdtabs title="S-expression" %}
+``` clojure
 [:cond
  [:= 0 1]
  "wrong"
@@ -288,12 +536,19 @@ Don't be surprised if you see `[:not nil]` is ... `nil`!
 
  true ;; <= must be literally `true`, not `:default` or something else
  "default"]
-;; sql output
-(jdbc/query your-db ["SELECT  (CASE WHEN ((0)=(1)) THEN ( ? ) WHEN ((2)>(3)) THEN ( ? ) WHEN ( true ) THEN ( ? ) END) AS q" "wrong" "wrong again" "default"])
-;; => [{:q "default"}]
-```
 
-### Pseudo columns
+```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT  (CASE WHEN ((0)=(1)) THEN ( ? ) WHEN ((2)>(3)) THEN ( ? ) WHEN ( true ) THEN ( ? ) END) AS q" "wrong" "wrong again" "default"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q "default"}]
+```
+{% endmdtabs %}
+
+## Pseudo columns
 
 In your floor-plan you can define so-called pseudo columns that look just like normal columns from client-side view:
 
@@ -305,25 +560,38 @@ In your floor-plan you can define so-called pseudo columns that look just like n
 
 You can't tell the difference from client-side:
 
-```clojure
-;; query for a real column
+{% mdtabs title="Query for a real column" %}
+``` clojure
 [{[:person/by-id 9]
   [:person/yob]}]
-;; query for a pseudo column
+```
+{% mdtab title="Query for a pseudo column" %}
+``` clojure
 [{[:person/by-id 9]
   [:person/age]}]
+```
+{% endmdtabs %}
 
-;; filter with a real column
+{% mdtabs title="Filter with a real column" %}
+``` clojure
 [{(:people/all {:filters [:= 1988 :person/yob]})
   [:person/name]}]
-;; filter with a pseudo column
+```
+{% mdtab title="Filter with a pseudo column" %}
+``` clojure
 [{(:people/all {:filters [:= 30 :person/age]})
   [:person/name]}]
 ```
+{% endmdtabs %}
 
-Behind the scenes, Walkable will expand the pseudo columns to whatever they are defined. You can also use pseudo columns in other pseudo columns' definition, but be careful as Walkable **won't check circular dependencies** for you.
+Behind the scenes, Walkable will expand the pseudo columns to whatever
+they are defined. You can also use pseudo columns in other pseudo
+columns' definition, but be careful as Walkable **won't check circular
+dependencies** for you.
 
-Please note you can only use true columns from the same table in the definition of pseudo columns. For instance, the following doesn't make sense:
+Please note you can only use true columns from the same table in the
+definition of pseudo columns. For instance, the following doesn't make
+sense:
 
 ```clojure
 ;; floor-plan
