@@ -98,7 +98,9 @@ You may also notice that the query syntax is the same for to-many relationships 
 
 Actually the properties and joins above can't stand alone themselves. They must stem from somewhere: enter idents. Idents are the root of all queries \(or the root of all **evals** :D\)
 
-> I lied in the examples in section 1 and 2: such queries are not enough for the query resolver to return such results. So what's missing? You guess... Idents!
+{% hint style="info" %}
+I lied in the examples in section 1 and 2: such queries are not enough for the query resolver to return such results. So what's missing? You guess... Idents!
+{% endhint %}
 
 Let's learn about two types of them.
 
@@ -198,90 +200,177 @@ Well, the distinction is less in syntax and more in semantics. For each key, the
 
 What's a dispatch key? Let's learn to recognize them through some examples:
 
-```clojure
-|-------------------+---------------+---------------|
 | key               | type          | dispatch-key  |
-|-------------------+---------------+---------------|
+|:------------------|:-------------:|:--------------|
 | :people/all       | keyword ident | :people/all   |
 | [:person/by-id 1] | vector ident  | :person/by-id |
 | :person/pets      | join          | :human/pets   |
-|-------------------+---------------+---------------|
-```
 
 ## 5. Parameters
 
 Sometimes you want the query resolver to modify a little bit of the data. Parameters are the piece to communicate just that.
 
-> Parameters must be implemented from the query resolver's side in order to have effect. The parameters in the examples below are provided to explain the syntax, so you get the idea.
+{% hint style="info" %}
+
+Parameters must be implemented from the query resolver's side in order
+to have effect. The parameters in the examples below are provided to
+explain the syntax, so you get the idea.
+
+{% endhint %}
 
 There are two ways to denote parameters, the new and the legacy syntax. Let's go for the new one first.
 
 ### 5.1 New syntax for parameters
 
+{% mdtabs title="Without params" %}
 ```clojure
-;; query
+;; simple query
 '[:person/name :person/height]
+```
+
+{% mdtab title="With params" %}
+```clojure
 ;; vs modified query with params in the property `:person/height`
 '[:person/name (:person/height {:unit :cm})]
 ```
+{% endmdtabs %}
 
 Just like a Clojure function's list of arguments, parameters may contain zero or more items. Personally, I prefer the use of exactly one hash-map. For instance, with Walkable you can use some pre-defined parameters:
 
+{% mdtabs title="Without params" %}
 ```clojure
-;; query with params `{:order-by :person/name}` added to the ident `:people/all`
+;; simple query
+'[{:people/all [:person/name :person/age]}]
+```
+
+{% mdtab title="With params" %}
+```clojure
+;; vs modified query with params `{:order-by :person/name}` added to the ident `:people/all`
 '[{(:people/all {:order-by :person/name}) [:person/name :person/age]}]
 
-;; query with params `{:offset 20 :limit 10}` added to the ident `:people/all`
-[{(:people/all {:offset 20 :limit 10}) [:person/name :person/age]}]
+```
+{% endmdtabs %}
+
+{% mdtabs title="Without params" %}
+```clojure
+;; simple query
+'[{:people/all [:person/name :person/age]}]
 ```
 
-Of course, someone else with a different taste may implement their query resolver to accept keyword parameters instead:
-
+{% mdtab title="With params" %}
 ```clojure
-;; query with params `'(:offset 20 :limit 10)` added to the ident `:people/all`
+;; vs modified query with params `{:offset 20 :limit 10}` added to the ident `:people/all`
+[{(:people/all {:offset 20 :limit 10}) [:person/name :person/age]}]
+
+```
+{% endmdtabs %}
+
+Of course, someone else with a different taste may implement their
+query resolver to accept keyword parameters instead:
+
+{% mdtabs title="Without params" %}
+```clojure
+;; simple query
+'[{:people/all [:person/name :person/age]}]
+```
+
+{% mdtab title="With params" %}
+```clojure
+;; vs modified query with params `'(:offset 20 :limit 10)` added to the ident `:people/all`
 '[{(:people/all :offset 20 :limit 10) [:person/name :person/age]}]
-;; query with params `'(:unit :cm)` in the property `:person/height`
+
+```
+{% endmdtabs %}
+
+{% mdtabs title="Without params" %}
+```clojure
+;; simple query
+'[:person/name :person/age]
+```
+
+{% mdtab title="With params" %}
+```clojure
+;; vs modified query with params `'(:unit :cm)` in the property `:person/height`
 '[:person/name (:person/height :unit :cm)]
 ```
+{% endmdtabs %}
 
 That's valid syntax, too.
 
 ### 5.2 Legacy syntax for parameters
 
-> This section is required only if you're a user of om.next or fulcro older than v2.2.1. Feel free to skip it otherwise.
+{% hint style="warning" %}
+
+This section is required only if you're a user of om.next or fulcro
+older than v2.2.1. Feel free to skip it otherwise.
+
+{% endhint %}
 
 The syntax for parameters of properties is the same.
 
 For idents and joins, you put the whole query inside a list, followed by the parameters:
 
+{% mdtabs title="Without params" %}
 ```clojure
-;; query with params `{:order-by :person/name}` added to the ident `:people/all`
+;; simple query
+'[{:people/all [:person/name :person/age]}]
+```
+{% mdtab title="With params" %}
+```clojure
+;; vs modified query with params `{:order-by :person/name}` added to the ident `:people/all`
 '[({:people/all [:person/name :person/age]}
    {:order-by :person/name})]
-;; query with params `{:offset 20 :limit 10}` added to the ident `:people/all`
+```
+{% endmdtabs %}
+
+{% mdtabs title="Without params" %}
+
+```clojure
+;; simple query
+'[{:people/all [:person/name :person/age]}]
+```
+
+{% mdtab title="With params" %}
+```clojure
+;; vs modified query with params `{:offset 20 :limit 10}` added to the ident `:people/all`
 '[({:people/all [:person/name :person/age]}
    {:offset 20 :limit 10})]
 ```
+{% endmdtabs %}
 
-These can be quite hard for human to follow if some child join also have parameters themselves. Fortunately, as you are using om.next / fulcro to build these queries from smaller ones from components, that would be no problem at all.
+These can be quite hard for human to follow if some child join also
+have parameters themselves. Fortunately, as you are using om.next /
+fulcro to build these queries from smaller ones from components, that
+would be no problem at all.
 
-Walkable can work with both new and legacy syntax for params. However the new one is only supported as of fulcro 2.2.1. If you're using om.next or older fulcro, you must use the legacy syntax otherwise your client-side app will crash.
+Walkable can work with both new and legacy syntax for params. However
+the new one is only supported as of fulcro 2.2.1. If you're using
+om.next or older fulcro, you must use the legacy syntax otherwise your
+client-side app will crash.
 
 {% hint style="info" %}
 ### Practise
 
-It's recommended to get acquainted with the query language by playing with the parser. Give some arbitrary query to `fulcro.client.primitives/query->ast` and see the output. Eg:
+It's recommended to get acquainted with the query language by playing
+with the parser. Give some arbitrary query to
+`com.wsscode.pathom.core/query->ast` and see the output. For example:
+
+{% endhint %}
+
+{% mdtabs title="Code" %}
 
 ```clojure
-(require [fulcro.client.primitives :as prim])
+(require [com.wsscode.pathom.core :refer [query->ast]])
 
-(prim/query->ast [:foo :bar {:yup [:that]}])
+(query->ast [:foo :bar {:yup [:that]}])
+```
 
-;; output:
+{% mdtab title="Output" %}
+```clojure
 {:type :root,
  :children [{:type :prop, :dispatch-key :foo, :key :foo}
             {:type :prop, :dispatch-key :bar, :key :bar}
             {:type :join, :dispatch-key :yup, :key :yup, :query [:that],
              :children [{:type :prop, :dispatch-key :that, :key :that}]}]}
 ```
-{% endhint %}
+{% endmdtabs %}
