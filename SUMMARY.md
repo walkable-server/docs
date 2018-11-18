@@ -1,8 +1,8 @@
 # Table of contents
 
 * [Introduction](README.md)
-  * [Overview](README.md#overview)
-  * [Performance](README.md#performance)
+* [Overview](Overview.md)
+* [Installation](Installation.md)
 * [Graph Query Syntax](query_language.md)
 * [Floor-plan](floor-plan.md)
 * [Emitter](emitter.md)
