@@ -1,25 +1,27 @@
-# Filters
-
-## Using filters
+# Using filters
 
 Any valid Walkable S-expression that evaluates to boolean \(not just some truthy values\) can be used in a filter.
 
-### Using filters directly in queries
+## Using filters directly in query's parameters
 
 ```clojure
-[{(:people/all {:filters [:or [:like :person/name "jon%"]
-                             [:< :person/yob 1970]]})
-  [:person/name :person/yob]]}
+`[{(:people/all {:filters [:or [:like :person/name "jon%"]
+                               [:< :person/yob 1970]]})
+   [:person/name :person/yob]]}
 ```
 
-> This is called `supplied-conditions` in Walkable query builder engine's source code.
+{% hint style="info" %}
+This is called `supplied-conditions` in Walkable query builder engine's source code.
+{% endhint %}
 
-### Filters in `:extra-conditions` floor-plan
+## Filters in `:extra-conditions` floor-plan
 
 You may want to enforce filters for specific idents/joins:
 
 * For DRY reason: you don't want to retype the same filter set again and again.
-* For security reason: once you define some constraints to limit what the clients can access for an ident or join, they're free to play with whatever left open to them.
+* For security reason: once you define some constraints to limit what
+  the clients can access for an ident or join, they're free to play
+  with whatever left open to them.
 
 ```clojure
 ;; floor-plan
@@ -32,14 +34,17 @@ You may want to enforce filters for specific idents/joins:
 
 ## Joins in filters
 
-You've seen filters used against columns of the current table. If you have defined some `:joins` in your `floor-plan`, you can also put constraints on columns of the joined tables, too.
+You've seen filters used against columns of the current table. If you
+have defined some `:joins` in your `floor-plan`, you can also put
+constraints on columns of the joined tables, too.
 
 ```clojure
 ;; find all people whose name starts with "jon" or whose friend's name
 ;; starts with "jon".
-[{(:people/all {:filters [:or [:like :person/name "jon%"]
-                          {:person/friend [:like :person/name "jon%"]}]})
-  [:person/name :person/yob]}]
+`[{(:people/all {:filters [:or [:like :person/name "jon%"]
+                               {:person/friend [:like :person/name "jon%"]}]})
+[:person/name :person/yob]}]
 ```
 
-You can have many such joins in filters and combine them with other expressions using `:and`/`:or`/`:not` however you like.
+You can have many such joins in filters and combine them with other
+expressions using `:and`/`:or`/`:not` however you like.
