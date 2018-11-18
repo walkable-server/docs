@@ -98,7 +98,7 @@ or a bit more sophisticated:
 
 Yes, you can. Have your data fetched in your Clojure mission critical app with confidence. Even more, build the query part of a fulcro server or REST api in minutes today! Call it from your Clojurescript app without worrying about SQL injection.
 
-You can learn about the above query language [here](doc/query_language.md)
+You can learn about the above query language [here](query_language.md)
 
 {% hint style="info" %}
 ### **Walkable is NOT about om.next**
@@ -183,7 +183,7 @@ will result in
              "john"]
 ```
 
-You can express pretty much anything with those S-expressions. Learn more about them [here](doc/s-expressions.md).
+You can express pretty much anything with those S-expressions. Learn more about them [here](s-expressions.md).
 
 {% hint style="info" %}
 #### Who should use Walkable?
@@ -257,7 +257,7 @@ Then you need to define your floor-plan and compile it
      ...          ...}))
 ```
 
-Details about the floor-plan is [here](https://walkable.gitbook.io/walkable/doc/floor-plan).
+Details about the floor-plan is [here](https://walkable.gitbook.io/walkable/floor-plan).
 
 Ready! It's time to run your graph queries:
 
