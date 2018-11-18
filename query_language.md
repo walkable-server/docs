@@ -299,7 +299,7 @@ That's valid syntax, too.
 
 ### 5.2 Legacy syntax for parameters
 
-{% hint style="warning" %}
+{% hint style="danger" %}
 
 This section is required only if you're a user of om.next or fulcro
 older than v2.2.1. Feel free to skip it otherwise.

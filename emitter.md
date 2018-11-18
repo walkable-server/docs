@@ -49,7 +49,7 @@ You need to provide the `:quote-marks` as a vector of two strings. For example:
 
 {% endmdtabs %}
 
-{% hint style="warning" %}
+{% hint style="danger" %}
 It's unlikely that you want to override `:quote-marks`. Keep the one from pre-defined emitters.
 {% endhint %}
 

@@ -276,7 +276,7 @@ A set of available columns must be provided at compile time so Walkable can pre-
 
 Walkable will automatically include columns found in `:joins` paths so you don't have to.
 
-{% hint style="warning" %}
+{% hint style="danger" %}
 Please note: keywords not found in the column set will be ignored. That means if you forget to include any of them, you can't use the missing one in a query's property or filter.
 {% endhint %}
 

@@ -412,7 +412,7 @@ Party time! Mix them as you wish:
 ```
 {% endmdtabs %}
 
-{% hint style="warning" %}
+{% hint style="danger" %}
 Please note that Walkable S-expressions are translated directly to SQL
 equivalent. Your DBMS may throw an exception if you ask for this:
 {% endhint %}
@@ -431,7 +431,7 @@ ERROR:  argument of OR must be type boolean, not type integer
 ```
 {% endmdtabs %}
 
-{% hint style="warning" %}
+{% hint style="danger" %}
 Don't be surprised if you see `[:not nil]` is ... `nil`!
 {% endhint %}
 

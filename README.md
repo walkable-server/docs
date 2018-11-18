@@ -118,7 +118,7 @@ People may have the impression that Walkable \(and Pathom\) is specific to om.ne
 Walkable's goal is to become the ultimate SQL library for Clojure.
 {% endhint %}
 
-{% hint style="warning" %}
+{% hint style="danger" %}
 ### For plain-SQL enthusiasts or ORM fans
 
 I urge you to challenge your assumptions by implementing your own version of the Realworld API Spec with your favorite ORM \(Django, Rails, Korma, Toucan, whatever\) and compare it with the implementation using Walkable [here](https://github.com/walkable-server/realworld/).
