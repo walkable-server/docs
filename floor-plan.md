@@ -18,54 +18,49 @@ Idents are the root of all queries. From an SQL dbms perspective, you must start
 
 Keyword idents can be defined as simple as:
 
+{% mdtabs title="Floor-plan" %}
 ```clojure
-;; floor-plan
 {:idents {:people/all "person"}}
 ```
-
-so queries like:
-
-```clojure
-[:people/all [:person/id :person/name]]
+{% mdtab title="Query" %}
+``` clojure
+`[{:people/all [:person/id :person/name]}]
 ```
-
-will result in an SQL query like:
-
-```sql
+{% mdtab title="SQL output" %}
+``` sql
 SELECT `id`, `name` FROM `person`
 ```
+{% endmdtabs %}
 
 ### 1.2 Vector idents
 
 These are idents whose key implies some condition. Instead of providing just the table, you provide the column \(as a namespaced keyword\) whose value match the ident argument found in the ident key.
 
-For example, the following vector ident:
+For example, the following vector ident will require a floor-plan like:
 
+{% mdtabs title="Vector ident" %}
 ```clojure
 ;; dispatch-key: `:person/by-id`
 ;; ident arguments: `1`
 [:person/by-id 1]
 ```
-
-will require a floor-plan like:
+{% mdtab title="Floor-plan" %}
 
 ```clojure
-;; floor-plan
 {:idents {:person/by-id :person/id}}
 ```
-
-so queries like:
+{% mdtab title="Query" %}
 
 ```clojure
-;; query
-[[:person/by-id 1] [:person/id :person/name]]
+[{[:person/by-id 1] [:person/id :person/name]}]
 ```
 
-will result in an SQL query like:
+{% mdtab title="SQL output" %}
 
 ```sql
 SELECT `id`, `name` FROM `person` WHERE `person`.`id` = 1
 ```
+{% endmdtabs %}
 
 ## 2 :joins
 
@@ -75,45 +70,43 @@ Let's see some examples.
 
 ### Example 1: Join column living in source table
 
+{% mdtabs title="Data" %}
+
 Assume table `cow` contains:
 
-```clojure
-|----+-------|
 | id | color |
-|----+-------|
+|---:|:-----:|
 | 10 | white |
 | 20 | brown |
-|----+-------|
-```
 
 and table `farmer` has:
 
-```clojure
-|----+------+--------|
 | id | name | cow_id |
-|----+------+--------|
+|---:|:-----|-------:|
 |  1 | jon  |     10 |
 |  2 | mary |     20 |
-|----+------+--------|
-```
+
+{% mdtab title="Query" %}
 
 and you want to get a farmer along with their cow using the query:
 
 ```clojure
-;; query
 [{[:farmer/by-id 1] [:farmer/name {:farmer/cow [:cow/id :cow/color]}]}]
 ```
 
-> For the join `:farmer/cow`, table `farmer` is the source and table `cow` is the target.
+For the join `:farmer/cow`, table `farmer` is the source and table `cow` is the target.
+
+{% mdtab title="Floor-plan" %}
 
 then you must define the join "path" like this:
 
 ```clojure
-;; floor-plan
 {:joins {:farmer/cow [:farmer/cow-id :cow/id]}}
 ```
 
 the above join path says: start with the value of column `farmer.cow_id` \(the join column\) then find the correspondent in the column `cow.id`.
+
+{% mdtab title="SQL output" %}
 
 Internally, Walkable will generate this query to fetch the entity whose ident is `[:farmer/by-id 1]`:
 
@@ -127,7 +120,7 @@ the value of column `farmer`.`cow_id` will be collected \(for this example it's 
 SELECT `cow`.`id`, `cow`.`color` FROM `cow` WHERE `cow`.`id` = 10
 ```
 
-Finally, Walkable will combine the results of the above SQL queries and return the final result:
+{% mdtab title="Result" %}
 
 ```clojure
 {[:farmer/by-id 1] #:farmer{:number 1,
@@ -135,45 +128,38 @@ Finally, Walkable will combine the results of the above SQL queries and return t
                             :cow #:cow{:index 10,
                                        :color "white"}}}
 ```
+{% endmdtabs %}
 
 ### Example 2: A join involving a join table
+
+{% mdtabs title="Data" %}
 
 Assume the following tables:
 
 source table `person`:
 
-```clojure
-|----+------|
 | id | name |
-|----+------|
+|---:|:-----|
 |  1 | jon  |
 |  2 | mary |
-|----+------|
-```
 
 target table `pet`:
 
-```clojure
-|----+--------|
 | id | name   |
-|----+--------|
+|---:|:-------|
 | 10 | kitty  |
 | 11 | maggie |
 | 20 | ginger |
-|----+--------|
-```
 
 join table `person_pet`:
 
-```clojure
-|-----------+--------+---------------|
 | person_id | pet_id | adoption_year |
-|-----------+--------+---------------|
+|----------:|-------:|--------------:|
 |         1 |     10 |          2010 |
 |         1 |     11 |          2011 |
 |         2 |     20 |          2010 |
-|-----------+--------+---------------|
-```
+
+{% mdtab title="Query" %}
 
 you may query for a person and their pets along with their adoption year
 
@@ -181,13 +167,16 @@ you may query for a person and their pets along with their adoption year
 [{[:person/by-id 1] [:person/name {:person/pets [:pet/name :person-pet/adoption-year]}]}]
 ```
 
+{% mdtab title="Floor-plan" %}
+
 then the `:joins` part of our floor-plan is as simple as:
 
 ```clojure
-;; floor-plan
 {:joins {:person/pets [:person/id :person-pet/person-id
                        :person-pet/pet-id :pet/id]}}
 ```
+
+{% mdtab title="SQL output" %}
 
 Walkable will issue an SQL query for `[:person/by-id 1]`:
 
@@ -202,10 +191,11 @@ SELECT `pet`.`name`, `person_pet`.`adoption_year`
 FROM `person_pet` JOIN `pet` ON `person_pet`.`pet_id` = `pet`.`id` WHERE `person_pet`.`person_id` = 1
 ```
 
+{% mdtab title="Result" %}
+
 and our not-so-atonishing result:
 
 ```clojure
-;; result
 {[:person/by-id 1] #:person{:id 1,
                             :name "jon",
                             :pets [{:pet/id 10,
@@ -215,38 +205,38 @@ and our not-so-atonishing result:
                                     :pet/name "maggie"
                                     :person-pet/adoption-year 2011}]}}
 ```
+{% endmdtabs %}
 
 ### Example 3: Join column living in target table
 
 No big deal. This is no more difficult than example 1.
 
+{% mdtabs title="Data" %}
+
 Assume table `farmer` contains:
 
-```clojure
-|----+-------|
 | id | name  |
-|----+-------|
+|---:|------:|
 | 1  | jon   |
 | 2  | mary  |
-|----+-------|
-```
 
 and table `cow` has:
 
-```clojure
-|----+-------+----------|
 | id | name  | owner_id |
-|----+-------+----------|
+|---:|------:|---------:|
 | 10 | white |     1    |
 | 20 | brown |     2    |
-|----+-------+----------|
-```
+
+{% mdtab title="Floor-plan" %}
 
 The `floor-plan` for this example can be a good exercise for the reader of this documentation. \(Sorry, actually I'm just too lazy to type it here :D \)
+{% endmdtabs %}
 
 ## 3 :reversed-joins
 
 A handy way to avoid typing a join whose path is just reversed version of another.
+
+{% mdtabs title="Floor-plan" %}
 
 The floor-plan for such a join is straightforward:
 
@@ -256,17 +246,22 @@ The floor-plan for such a join is straightforward:
  :reversed-joins {:cow/owner :farmer/cow}}
 ```
 
+{% mdtab title="Queries" %}
 so you can go both ways:
 
+- find the cow of a given farmer
+
 ```clojure
-;; queries:
-
-;; - find the cow of a given farmer
 [{[:farmer/by-id 1] [:farmer/name {:farmer/cow [:cow/id :cow/color]}]}]
+```
 
-;; - find the owner of a given cow
+- find the owner of a given cow
+
+```clojure
 [{[:cow/by-id 10] [:cow/id :cow/color {:cow/owner [:farmer/name]}]}]
 ```
+
+{% endmdtabs %}
 
 Also, another reason to use `:reversed-joins` is that it helps with semantics.
 
@@ -276,8 +271,7 @@ A set of available columns must be provided at compile time so Walkable can pre-
 
 ```clojure
 ;; floor-plan
-{:columns #{:farmer/name
-            :cow/color}}
+{:columns #{:farmer/name :cow/color}}
 ```
 
 Walkable will automatically include columns found in `:joins` paths so you don't have to.
@@ -311,25 +305,6 @@ Please see documentation for [Filters](filters.md)
 
 Please see documentation for [Emitters](filters.md)
 
-## 8 :required-columns
+## 8 :pseudo-columns
 
-{% hint style="info" %}
-You need to understand Pathom plugins to make use of this.
-{% endhint %}
-
-Automatically fetch some columns of the same level whenever a namespace keyword is asked for. This is useful when you want to derive a property from some SQL columns using Clojure code \(to be specific, as Pathom plugins\)
-
-Please see [example.clj](https://github.com/walkable-server/walkable/tree/ab05c4706867ea7cce2daa6b903ee23834e1cf7f/dev/src/walkable_demo/handler/example.clj) for examples. Things to look at:
-
-* `derive-attributes` which calculates `:pet/age` and `:person/age` from `:pet/yob` and `:person/yob` respectively.
-* required inputs for `:pet/age` and `:person/age` in `:required-columns`:
-
-```clojure
-;; floor-plan
-{:required-columns {:pet/age    #{:pet/yob}
-                    :person/age #{:person/yob}}}
-```
-
-## 9 :pseudo-columns
-
-Please see [dev.clj](https://github.com/walkable-server/walkable/tree/ab05c4706867ea7cce2daa6b903ee23834e1cf7f/dev/src/dev.clj) for examples.
+Please see documentation for [Pseudo-columns](s-expressions.md#pseudo-columns)
