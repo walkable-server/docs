@@ -39,7 +39,7 @@ nil
 
 ### Columns
 
-> Note: The examples just use backticks as quote marks. Depending on your schema configuration, Walkable will emit SQL strings using whatever quote marks you specified.
+> Note: The examples just use backticks as quote marks. Depending on your emitter configuration, Walkable will emit SQL strings using whatever quote marks you specified.
 
 ```clojure
 ;; expression
@@ -295,10 +295,10 @@ Don't be surprised if you see `[:not nil]` is ... `nil`!
 
 ### Pseudo columns
 
-In your schema you can define so-called pseudo columns that look just like normal columns from client-side view:
+In your floor-plan you can define so-called pseudo columns that look just like normal columns from client-side view:
 
 ```clojure
-;; schema
+;; floor-plan
 ;; :person/yob is a real column
 {:pseudo-columns {:person/age [:- 2018 :person/yob]}}
 ```
@@ -326,7 +326,7 @@ Behind the scenes, Walkable will expand the pseudo columns to whatever they are 
 Please note you can only use true columns from the same table in the definition of pseudo columns. For instance, the following doesn't make sense:
 
 ```clojure
-;; schema
+;; floor-plan
 {:pseudo-columns {:person/age [:- 2018 :pet/yob]}}
 ```
 

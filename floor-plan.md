@@ -19,7 +19,7 @@ Idents are the root of all queries. From an SQL dbms perspective, you must start
 Keyword idents can be defined as simple as:
 
 ```clojure
-;; schema
+;; floor-plan
 {:idents {:people/all "person"}}
 ```
 
@@ -69,7 +69,7 @@ SELECT `id`, `name` FROM `person` WHERE `person`.`id` = 1
 
 ## 2 :joins
 
-Each join schema describes the "path" from the source table \(of the source entity\) to the target table \(and optionally the join table\).
+Each entry in `:joins` describes the "path" from the source table \(of the source entity\) to the target table \(and optionally the join table\).
 
 Let's see some examples.
 
@@ -184,7 +184,7 @@ you may query for a person and their pets along with their adoption year
 then the `:joins` part of our floor-plan is as simple as:
 
 ```clojure
-;; schema
+;; floor-plan
 {:joins {:person/pets [:person/id :person-pet/person-id
                        :person-pet/pet-id :pet/id]}}
 ```

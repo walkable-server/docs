@@ -14,7 +14,7 @@ Any valid Walkable S-expression that evaluates to boolean \(not just some truthy
 
 > This is called `supplied-conditions` in Walkable query builder engine's source code.
 
-### Filters in `:extra-conditions` schema
+### Filters in `:extra-conditions` floor-plan
 
 You may want to enforce filters for specific idents/joins:
 
@@ -22,7 +22,7 @@ You may want to enforce filters for specific idents/joins:
 * For security reason: once you define some constraints to limit what the clients can access for an ident or join, they're free to play with whatever left open to them.
 
 ```clojure
-;; schema
+;; floor-plan
 {:extra-conditions {:people/all [:= :person/hidden false]
 ;; any valid filter will work
                     :person/friends [:or
