@@ -24,8 +24,28 @@ this is shorter:
 
 This also applies to keys under `:extra-conditions`, `:joins` and `:cardinality`.
 
-## 2. Lambda form for `:extra-conditions`
+## 2. Functions in `:extra-conditions`
 
-Instead of specifying a fixed filters set for an ident or a join, you; can use a function that returns such filters set. The function accepts `env` as its argument.
+Instead of specifying a fixed filters set for an ident or a join, you can use a function that returns such filters set. The function accepts `env` as its argument.
 
 Please see [dev.clj](https://github.com/walkable-server/walkable/tree/ab05c4706867ea7cce2daa6b903ee23834e1cf7f/dev/src/dev.clj) for examples.
+
+
+## 3 :required-columns
+
+{% hint style="info" %}
+You need to understand Pathom plugins to make use of this.
+{% endhint %}
+
+Automatically fetch some columns of the same level whenever a namespace keyword is asked for. This is useful when you want to derive a property from some SQL columns using Clojure code \(to be specific, as Pathom plugins\)
+
+Please see [example.clj](https://github.com/walkable-server/walkable/tree/ab05c4706867ea7cce2daa6b903ee23834e1cf7f/dev/src/walkable_demo/handler/example.clj) for examples. Things to look at:
+
+* `derive-attributes` which calculates `:pet/age` and `:person/age` from `:pet/yob` and `:person/yob` respectively.
+* required inputs for `:pet/age` and `:person/age` in `:required-columns`:
+
+```clojure
+;; floor-plan
+{:required-columns {:pet/age    #{:pet/yob}
+                    :person/age #{:person/yob}}}
+```
