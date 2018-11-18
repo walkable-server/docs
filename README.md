@@ -31,21 +31,21 @@ Ever imagined sending queries like this to your SQL database?
 
 
 {% mdtab title="Data" %}
-### Table "person":
+Table "person":
 
 | id | name | age |
 | :---: | :--- | :---: |
 | 1 | Mary | 20 |
 | 2 | John | 15 |
 
-### Table "pet":
+Table "pet":
 
 | id | name | favorite\_location |
 | :--- | :--- | :--- |
 | 10 | Tom | garden |
 | 20 | Jerry | kitchen |
 
-### Table "person\_pet":
+Table "person\_pet":
 
 | person\_id | pet\_id |
 | :---: | :---: |
@@ -78,7 +78,7 @@ or a bit more sophisticated:
 
 
 {% mdtab title="Data" %}
-### Table "article":
+Table "article":
 
 | id | title | author\_id | hidden | created\_date |
 | :---: | :--- | :---: | :---: | :--- |
@@ -86,7 +86,7 @@ or a bit more sophisticated:
 | 2 | Welcome | 20 | false | 2018-11-10 |
 | 3 | Unfinished | 20 | true | 2018-09-20 |
 
-### Table "user":
+Table "user":
 
 | id | username | karma |
 | :---: | :--- | :---: |
