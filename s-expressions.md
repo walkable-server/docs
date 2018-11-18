@@ -612,25 +612,39 @@ Todo: more docs.
 
 The following expressions work in Postgresql:
 
-```clojure
-;; expression
+{% mdtabs title="S-expression" %}
+``` clojure
 [:= 1
  [:cast [:get-as-text [:jsonb {:a 1}] "a"] :integer]]
-;; sql output
+```
+{% mdtab title="SQL output" %}
+``` clojure
 (jdbc/query your-db ["SELECT ((1)=(CAST ((?::jsonb)->>( ? ) AS INTEGER))) AS q" "{\"a\" :1}" "a"])
-;; => [{:q true}]
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q true}]
+```
+{% endmdtabs %}
 
-;; expression
+{% mdtabs title="S-expression" %}
+``` clojure
 [:or [:= 2 [:array-length [:array 1 2 3 4] 1]]
  [:contains [:jsonb {:a 1 :b 2}]
   [:jsonb {:a 1}]]
  [:jsonb-exists [:jsonb {:a 1 :b 2}]
   "a"]]
-;; sql output
+```
+{% mdtab title="SQL output" %}
+``` clojure
 (jdbc/query your-db ["SELECT (((2)=(array_length (ARRAY[1, 2, 3, 4], 1)))
 OR ((?::jsonb)@>(?::jsonb))
 OR (jsonb_exists (?::jsonb,  ? )))
 AS q"
     "{\"a\":1,\"b\":2}" "{\"a\":1}" "{\"a\":1,\"b\":2}" "a"])
-;; => [{:q true}]
 ```
+{% mdtab title="result" %}
+``` clojure
+[{:q true}]
+```
+{% endmdtabs %}
