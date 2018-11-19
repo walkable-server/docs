@@ -8,7 +8,8 @@
                 "-fontsettings", "-sharing",
                 "localized-footer", "toolbar", "anchorjs",
                 "folding-menu",
-                "mdtabs", "hints", "prism", "-highlight"
+                "mdtabs@git+https://github.com/walkable-server/plugin-mdtabs",
+                "hints", "prism", "-highlight"
                ],
   "pluginsConfig": {
     "edit-link": {
