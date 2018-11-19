@@ -8,9 +8,9 @@ cache:
     - node_modules/
 
 before_script:
-  - npm install gitbook-cli -g # install gitbook
-  - gitbook fetch 3.2.3 # fetch final stable version
-  - gitbook install # add any requested plugins in book.json
+  - npm install gitbook-cli # install gitbook
+  - npm run gitbook fetch 3.2.3 # fetch final stable version
+  - npm run gitbook install # add any requested plugins in book.json
 
 # the 'pages' job will deploy and build your site to the 'public' path
 pages:
