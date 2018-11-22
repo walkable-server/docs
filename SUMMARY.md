@@ -1,8 +1,8 @@
 # Table of contents
 
 * [Introduction](README.md)
-* [Overview](Overview.md)
-* [Installation](Installation.md)
+* [Overview](overview.md)
+* [Installation](installation.md)
 * [Query Language](query_language.md)
 * [Floor-plan](floor-plan.md)
 * [Emitter](emitter.md)
