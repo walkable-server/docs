@@ -8,5 +8,6 @@
 * [Emitter](emitter.md)
 * [S-expressions](s-expressions.md)
 * [Filters](filters.md)
+* [Pagination](pagination.md)
 * [Floor-plan \(advanced\)](floor_plan_advanced.md)
 * [Developing Walkable](developing_walkable.md)
