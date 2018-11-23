@@ -313,3 +313,7 @@ Please see documentation for [Pseudo-columns](s-expressions.md#pseudo-columns)
 
 Please see documentation for [Pagination](pagination.md#validator-and-default-value)
 
+## 10 :aggregators
+
+Please see documentation for [Aggregators](aggregators.md)
+
