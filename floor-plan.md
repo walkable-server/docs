@@ -308,3 +308,8 @@ Please see documentation for [Emitters](filters.md)
 ## 8 :pseudo-columns
 
 Please see documentation for [Pseudo-columns](s-expressions.md#pseudo-columns)
+
+## 9 :pagination-fallbacks
+
+Please see documentation for [Pagination](pagination.md#validator-and-default-value)
+
