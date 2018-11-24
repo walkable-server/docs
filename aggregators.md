@@ -32,17 +32,20 @@ Aggregators work well with filters (and pagination, too!)
  {:farmers/total [:count-*]}}
 ```
 {% mdtab title="Query" %}
+Count number of all farmers whose name starting with "a":
+
 ```clojure
-`[(:farmers/total {:filters [:= :farmer/name "mary"]})]
+`[(:farmers/total {:filters [:like :farmer/name "a%"]})]
 ```
 {% mdtab title="SQL output" %}
+Parameterized query:
 ```sql
-SELECT COUNT(*) AS `farmers/total`  FROM `farmer`
-WHERE `farmer`.`name` = ?
+SELECT COUNT(*) AS `farmers/total` FROM `farmer`
+WHERE `farmer`.`name` LIKE ?
 ```
 parameters:
 ```clojure
-["mary"]
+["a%"]
 ```
 {% endmdtabs %}
 
@@ -51,32 +54,101 @@ parameters:
 In the above examples, aggregators are used against idents. How
 about aggregators with joins?
 
-{% mdtabs title="Floor plan" %}
+{% mdtabs title="Floor-plan" %}
 ```clojure
-{:idents           {:world/all   "human"}
- :joins            {:human/follower-count
-                    [:human/number :follow/human-1 :follow/human-2 :human/number]}
- :aggregators      {:human/follower-count [:count-*]}}
+{:idents
+ {:person/by-id :person/id}
+ :joins
+ {:person/pet-count ;; the join path you would use with a normal join:
+  [:person/id :person-pet/person-id :person-pet/pet-id :pet/id]}
+ :aggregators
+ {:person/pet-count [:count-*]}}
 ```
+
 {% mdtab title="Query" %}
 ```clojure
-[{:world/all [:human/name :human/follower-count]}]
+[{[:person/by-id 1]
+  [:person/id
+   :person/name
+   :person/pet-count]}]
 ```
+
 {% mdtab title="Data" %}
-Todo
+Table "person":
+
+| id | name |
+| :---: | :--- |
+| 1 | Mary |
+| 2 | John |
+
+Table "pet":
+
+| id | name |
+| :--- | :--- |
+| 10 | Tom |
+| 20 | Jerry |
+
+Table "person\_pet":
+
+| person\_id | pet\_id |
+| :---: | :---: |
+| 1 | 10 |
+| 1 | 20 |
+
+
 {% mdtab title="Result" %}
 ```clojure
-;; Todo
+{[:person/by-id 1]
+ {:person/id        1
+  :person/name      "Mary"
+  :person/pet-count 2}}
 ```
+
 {% endmdtabs %}
 
 ## Common SQL aggregators
 
 `:avg`, `:max`, `:min`, `:count`, `:count-*`
 
-## More freedom with S-expressions
-
 ## Aggregators vs Pseudo-columns
 
-Aggregators are for single values, while pseudo columns are for adding
-one or more columns to all rows.
+An aggregator is meant to produce a single value, while pseudo columns
+are for adding one or more columns to all rows.
+
+For instance, if you want the value of:
+
+```sql
+max (`table_a`.`column_x`)
+```
+
+you will need an aggregator:
+
+``` clojure
+;; floor-plan
+{:aggregators {:your/aggregator [:max :table-a/column-x]}}
+```
+
+In contrast, if you want the value of:
+
+```sql
+max (`table_a`.`column_x`, `table_a`.`column_y`)
+```
+
+you will need a pseudo-column:
+
+``` clojure
+;; floor-plan
+{:pseudo-columns {:your/other-column [:max :table-a/column-x :table-a/column-y]}}
+```
+
+## More freedom with S-expressions
+
+You're free to use whatever s-expression in your aggregator, as long
+as the final result returned by SQL is a single value.
+
+``` clojure
+;; floor-plan
+{:aggregators {:your/aggregator [:/ [:+ [:* 10 [:max :table-a/column-x]]
+                                        [:max :table-a/column-y]]
+                                     2]}}
+```
