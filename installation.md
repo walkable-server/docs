@@ -3,8 +3,7 @@
 ## Project dependencies
 
 ```clojure
-;; no stable version yet
-[walkable "1.1.0-SNAPSHOT"]
+[walkable "1.1.0-rc1"]
 
 ```
 
