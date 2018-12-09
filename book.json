@@ -1,6 +1,6 @@
 {
   "gitbook": "3.x.x",
-  "title": "Walkable SQL library for Clojure",
+  "title": "Walkable - Clojure(script) SQL library for building APIs",
     "plugins": ["github", "github-buttons", "toggle-chapters",
                 "theme-fexa@git+https://github.com/walkable-server/gitbook-plugin-theme-fexa.git",
                 "back-to-top-button", "copy-code-button",
