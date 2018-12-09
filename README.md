@@ -143,7 +143,7 @@ To be more specific, anyone at any level of enthusiasm:
 * James Reeves for Duct framework. The best development experience I've ever had
 * Tony Kay for his heroic work on fulcro that showed me how great things can be done
 * Wilker Lucio for pathom and being very supportive
-* Sean Corfield for clojure.jdbc which we all use extensively
+* Sean Corfield for clojure.java.jdbc which we all use extensively
 * Bozhidar Batsov and CIDER team!!!
 
 ## Performance
