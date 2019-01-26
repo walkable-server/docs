@@ -1,13 +1,19 @@
-# A tour of Walkable S-expressions
-
-S-expressions is the way Walkable allow you to write arbitrary SQL expressions in your [paredit](https://github.com/clojure-emacs/cider)/[parinfer](https://github.com/shaunlebron/parinfer)-[powered](https://github.com/tpope/vim-fireplace) [editors](https://cursive-ide.com/) without compromising security.
+S-expressions is the way Walkable allow you to write arbitrary SQL
+expressions in your
+[paredit](https://github.com/clojure-emacs/cider)/[parinfer](https://github.com/shaunlebron/parinfer)-[powered](https://github.com/tpope/vim-fireplace)
+[editors](https://cursive-ide.com/) without compromising security.
 
 {% hint style="info" %}
 
 Note about SQL examples:
 
-* S-expressions can end up as SQL strings in either `SELECT` statements or `WHERE` conditions. For demonstrating purpose, the strings are wrapped in `SELECT ... as q` so the SQL outputs are executable, except ones with tables and columns.
-* SQL output may differ when you `require` different implementations \(ie `(require 'walkable.sql-query-builder.impl.postgres)` vs `(require 'walkable.sql-query-builder.impl.sqlite)`\).
+* S-expressions can end up as SQL strings in either `SELECT`
+  statements or `WHERE` conditions. For demonstrating purpose, the
+  strings are wrapped in `SELECT ... as q` so the SQL outputs are
+  executable, except ones with tables and columns.
+* SQL output may differ when you `require` different implementations
+  \(ie `(require 'walkable.sql-query-builder.impl.postgres)` vs
+  `(require 'walkable.sql-query-builder.impl.sqlite)`\).
 
 {% endhint %}
 
@@ -412,10 +418,9 @@ Party time! Mix them as you wish:
 ```
 {% endmdtabs %}
 
-{% hint style="danger" %}
+## Notice
 Please note that Walkable S-expressions are translated directly to SQL
 equivalent. Your DBMS may throw an exception if you ask for this:
-{% endhint %}
 
 {% mdtabs title="S-expression" %}
 ``` clojure
@@ -431,9 +436,7 @@ ERROR:  argument of OR must be type boolean, not type integer
 ```
 {% endmdtabs %}
 
-{% hint style="danger" %}
 Don't be surprised if you see `[:not nil]` is ... `nil`!
-{% endhint %}
 
 {% mdtabs title="S-expression" %}
 ``` clojure
