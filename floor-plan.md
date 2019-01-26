@@ -263,13 +263,13 @@ so you can go both ways:
 
 Also, another reason to use `:reversed-joins` is that it helps with semantics.
 
-## 4 :columns
+## 4 :true-columns
 
 A set of available columns must be provided at compile time so Walkable can pre-compute part of SQL query strings.
 
 ```clojure
 ;; floor-plan
-{:columns #{:farmer/name :cow/color}}
+{:true-columns #{:farmer/name :cow/color}}
 ```
 
 Walkable will automatically include columns found in `:joins` paths so you don't have to.
@@ -315,3 +315,8 @@ Please see documentation for [Pagination](pagination.md#validator-and-default-va
 
 Please see documentation for [Aggregators](aggregators.md)
 
+## 11 :variable-getters, :variable-getter-graphs and :public-variables
+
+Please see documentation for [Variables](variables.md)
+
+## 12 :required-columns

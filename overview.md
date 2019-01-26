@@ -6,7 +6,7 @@ Basically you define your floor-plan like this:
                     :person/by-id :person/id
                     ;; just select from `person` table without any constraints
                     :people/all "person"}
- :columns          #{:person/name :person/yob}
+ :true-columns    #{:person/name :person/yob}
  :extra-conditions { ;; enforce some constraints whenever this join is asked for
                     :pet/owner [:and
                                 [:= :person/hidden true]
