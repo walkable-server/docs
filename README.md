@@ -120,25 +120,9 @@ language that is expressive and based off data structure. Om.next's
 EDN query language happens to satisfy that.
 
 Walkable's goal is to become the ultimate SQL library for Clojure.
+
 {% endhint %}
 
-{% hint style="danger" %}
-### For plain-SQL enthusiasts or ORM fans
-
-I urge you to challenge your assumptions by implementing your own version of the Realworld API Spec with your favorite ORM \(Django, Rails, Korma, Toucan, whatever\) and compare it with the implementation using Walkable [here](https://github.com/walkable-server/realworld/).
-{% endhint %}
-
-{% hint style="info" %}
-#### Who should use Walkable?
-
-TL;DR: Anyone who have both Clojure and SQL in their toolkit.
-
-To be more specific, anyone at any level of enthusiasm:
-
-* Any Clojure developers who need to pull data from an SQL database \(maybe for a web/mobile app, maybe for doing some serious calculation, maybe just to migrate away to Datomic :D \)
-* Clojure enthusiasts who have happen to have ORM-powered apps \(ie Korma, Django, Rails, most PHP systems, etc.\) in production but feel overwhelmed by the tedious task of developing new models \(or dreaded by the error-prone nature of modifying them.\)
-* Clojure extremists who use SQL and think Clojure must be used in both backend side and frontend side, and the two sides must talk to each other using EDN data full of namespaced keywords instead of some string-based query language like GraphQL. Think not only om.next/fulcro but also reframe/reagent, hoplon, rum/prum, keechma, qlkit, quiescent etc.
-{% endhint %}
 
 ## Special thanks to:
 
