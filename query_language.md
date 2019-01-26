@@ -1,5 +1,3 @@
-## Elements of the query language
-
 Walkable uses a graph query language to describe what data you want
 from your SQL DBMS. The query language was inspired by Datomic's [Pull
 API](https://docs.datomic.com/on-prem/pull.html) and

@@ -1,5 +1,3 @@
-# Pagination
-
 Walkable supports SQL pagination you've been familiar with: `OFFSET`,
 `LIMIT` and `ORDER BY`.
 

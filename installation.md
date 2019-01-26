@@ -1,5 +1,3 @@
-# Installation
-
 ## Project dependencies
 
 ```clojure

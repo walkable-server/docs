@@ -1,5 +1,3 @@
-# Floor-plan \(advanced\)
-
 ## 1. Syntactic sugars
 
 ### Composite key for `:idents`, `:extra-conditions`, `:joins` and `:cardinality`.

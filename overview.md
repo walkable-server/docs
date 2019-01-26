@@ -1,5 +1,3 @@
-## Overview
-
 Basically you define your floor-plan like this:
 
 ```clojure
