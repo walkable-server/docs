@@ -1,6 +1,5 @@
-# Using filters
-
-Any valid Walkable S-expression that evaluates to boolean \(not just some truthy values\) can be used in a filter.
+Any valid Walkable S-expression that evaluates to boolean \(not just
+some truthy values\) can be used in a filter.
 
 ## Using filters directly in query's parameters
 
