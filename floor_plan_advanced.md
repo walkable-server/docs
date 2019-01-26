@@ -22,14 +22,7 @@ this is shorter:
 
 This also applies to keys under `:extra-conditions`, `:joins` and `:cardinality`.
 
-## 2. Functions in `:extra-conditions`
-
-Instead of specifying a fixed filters set for an ident or a join, you can use a function that returns such filters set. The function accepts `env` as its argument.
-
-Please see [dev.clj](https://github.com/walkable-server/walkable/tree/ab05c4706867ea7cce2daa6b903ee23834e1cf7f/dev/src/dev.clj) for examples.
-
-
-## 3 :required-columns
+## 2 :required-columns
 
 {% hint style="info" %}
 You need to understand Pathom plugins to make use of this.
