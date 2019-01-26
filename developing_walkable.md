@@ -1,5 +1,3 @@
-# Developing Walkable
-
 Walkable comes with a [Duct](https://github.com/duct-framework/duct) setup as its development environment which can be found in `dev` directory.
 
 {% hint style="info" %}

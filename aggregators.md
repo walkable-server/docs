@@ -1,5 +1,3 @@
-# Aggregators
-
 Sometimes you don't want columns of a table but the total number of
 records in it. Use `:aggregators` in that case.
 
