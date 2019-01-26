@@ -1,7 +1,7 @@
 ## Project dependencies
 
 ```clojure
-[walkable "1.2.0-snapshot"]
+[walkable "1.2.0-SNAPSHOT"]
 
 ```
 
