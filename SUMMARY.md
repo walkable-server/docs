@@ -10,5 +10,6 @@
 * [Filters](filters.md)
 * [Pagination](pagination.md)
 * [Aggregators](aggregators.md)
+* [Variables](variables.md)
 * [Floor-plan \(advanced\)](floor_plan_advanced.md)
 * [Developing Walkable](developing_walkable.md)
