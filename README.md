@@ -1,22 +1,20 @@
-# Introduction
-
-<table>
-<tbody>
-<tr style="border: none;">
-<td style="border: none;text-align:left"><img src="assets/walkable.png" alt=""></td>
-<td style="border: none;text-align:left"><strong>Walkable</strong> is a serious way to fetch data from SQL for Clojure: Datomic® pull (Graphql-ish) syntax, Clojure flavored filtering and more.</td>
-</tr>
-</tbody>
-</table>
+<img src="assets/walkable.png"
+ alt="Walkable logo" title="Walkable logo" align="right" />
 
 > Data dominates. If you’ve chosen the right data structures and
 > organized things well, the algorithms will almost always be
 > self-evident. Data structures, not algorithms, are central to
-> programming. -- Rob Pike
+> programming.
+>   – Rob Pike
+
 
 
 > Bad programmers worry about the code. Good programmers worry about
-> data structures and their relationships. -- Linus Torvalds
+> data structures and their relationships.
+>   – Linus Torvalds
+
+**Walkable** is a serious way to fetch data from SQL for Clojure: Datomic® pull
+(Graphql-ish) syntax, Clojure flavored filtering and more.
 
 Ever imagined sending queries like this to your SQL database?
 
@@ -106,14 +104,20 @@ Table "user":
 
 {% endmdtabs %}
 
-Yes, you can. Have your data fetched in your Clojure mission critical app with confidence. Even more, build the query part of a fulcro server or REST api in minutes today! Call it from your Clojurescript app without worrying about SQL injection.
+Yes, you can. Have your data fetched in your Clojure mission critical
+app with confidence. Even more, build the query part of a fulcro
+server or REST api in minutes today! Call it from your Clojurescript
+app without worrying about SQL injection.
 
 You can learn about the above query language [here](query_language.md)
 
 {% hint style="info" %}
 ### **Walkable is NOT about om.next**
 
-People may have the impression that Walkable \(and Pathom\) is specific to om.next. That is NOT the case! Walkable requires a query language that is expressive and based off data structure. Om.next query language happens to satisfy that.
+People may have the impression that Walkable \(and Pathom\) is
+specific to om.next. That is NOT the case! Walkable requires a query
+language that is expressive and based off data structure. Om.next's
+EDN query language happens to satisfy that.
 
 Walkable's goal is to become the ultimate SQL library for Clojure.
 {% endhint %}
