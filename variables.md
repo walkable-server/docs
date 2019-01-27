@@ -4,9 +4,13 @@ time and filled into placeholders. Variables is also the way to allow
 dynamic queries because the values of such variables are evaluated at
 run time.
 
+## Variable getters
+
 To use variables, place a Clojure symbol inside any [Walkable
-S-expression](s-expressions.md), which means in a pseudo column
-definition, or an extra-condition constraint.
+S-expression](s-expressions.md), which means in a [pseudo column
+definition](s-expressions.md#pseudo-columns), an
+[aggregator](aggregators.md) or an [extra-condition
+constraint](filters.md#filters-in-extra-conditions-floor-plan).
 
 ```clj
 ;; floor-plan
@@ -21,9 +25,102 @@ Of course, you must provide how that variable is computed:
 
 ``` clj
 ;; also in floor-plan
-{:variable-getters {'current-year (fn [env] 2019)}
+{:variable-getters
+    [{:key 'current-year
+      :fn  (fn [env] 2019)}]}
 ```
 
 That's a boring function that returns a hard-coded value (`2019`), but
 you can be more creative than I was. Do you remember the weird `env`
-hashmap we've injected when we build the parser?
+hashmap we've injected when we build the parser? Such getter functions
+will be passed that `env` as its argument.
+
+You can have as many variables in your expresions as you like, as long
+as you tell Walkable how to compute all of them:
+
+
+``` clj
+;; also in floor-plan
+{:variable-getters
+    [{:key 'foo
+      :fn  (fn [env] ...)}
+     {:key 'bar
+      :fn  (fn [env] ...)}
+     ...]}
+```
+
+A variable's value can be cached throughout the request by the keyword
+`:cached?`:
+
+``` clj
+;; floor-plan
+{:variable-getters
+    [{:key 'current-year
+      :cached? true
+      :fn  (fn [env] 2019)}]}
+```
+
+It's totally fine to use namespaced symbols for your variables:
+
+``` clj
+{:pseudo-columns {:person/age [:- 'app/current-year :person/yob]}}
+```
+
+## Variable getter graphs
+
+Sometimes the computation of several variables share a step that you
+don't want to repeat. You can pack those variables inside a
+[Plumbing](https://github.com/plumatic/plumbing/) graph.
+
+``` clj
+(require '[plumbing.core :refer [fnk]])
+
+;; floor-plan
+{:variable-getter-graphs
+  [{:graph {:x (fnk [env] ...)
+            :y (fnk [env x] ...)
+            :z (fnk [x y] ...)}]}
+```
+
+Please refer to Plumbing documentation for usage. Basically, for each
+keyword in the graph provided, you will have an equivalant variable
+(denoted as a Clojure symbol). For instance, for the above graph
+you'll get three variables `'x`, `'y` and `'z`.
+
+You can't use namespaced keywords (and therefore the variable symbols)
+in the graph, however.
+
+By default, all variables of the same graph will be computed once
+whenever at least one of them gets mentioned. This graph's behavior is
+called "eager evaluation". If the graph is big and computation is
+expressive, you may want it to be "lazy" which means only required
+variables get computed:
+
+``` clj
+;; floor-plan
+{:variable-getter-graphs
+  [{:graph {... ...}
+    :lazy? true}]}
+```
+
+As you can see, the value for `:variable-getter-graphs` is a
+vector. You can have as many such graphs as you please:
+
+``` clj
+;; floor-plan
+{:variable-getter-graphs
+  [{:graph {... ...}
+    :lazy? true}]}
+```
+
+However, lazy evaluation is not available in Clojurescript version of plumbing.
+
+Just like normal variable getters, each variable getter graph can be
+cached with the `:cached?` keyword:
+
+``` clj
+;; floor-plan
+{:variable-getter-graphs
+  [{:graph {... ...}
+    :cached? true}]}
+```
