@@ -103,16 +103,6 @@ variables get computed:
     :lazy? true}]}
 ```
 
-As you can see, the value for `:variable-getter-graphs` is a
-vector. You can have as many such graphs as you please:
-
-``` clj
-;; floor-plan
-{:variable-getter-graphs
-  [{:graph {... ...}
-    :lazy? true}]}
-```
-
 However, lazy evaluation is not available in Clojurescript version of plumbing.
 
 Just like normal variable getters, each variable getter graph can be
@@ -123,4 +113,20 @@ cached with the `:cached?` keyword:
 {:variable-getter-graphs
   [{:graph {... ...}
     :cached? true}]}
+```
+
+As you can see, the value for `:variable-getter-graphs` is a
+vector. You can have as many such graphs as you please:
+
+``` clj
+;; floor-plan
+{:variable-getter-graphs
+  [{:graph {... ...}
+    :lazy? true
+    :cached? true}
+   {:graph {... ...}
+    :lazy? true}
+   {:graph {... ...}
+    :cached? true}
+   ...]}
 ```
