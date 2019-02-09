@@ -87,8 +87,21 @@ keyword in the graph provided, you will have an equivalant variable
 (denoted as a Clojure symbol). For instance, for the above graph
 you'll get three variables `'x`, `'y` and `'z`.
 
-You can't use namespaced keywords (and therefore the variable symbols)
-in the graph, however.
+You can't use namespaced keywords in graphs. However, you can make the
+equivalent symbols share a namespace. Specify a string for it:
+
+``` clj
+;; floor-plan
+{:variable-getter-graphs
+  [{:graph {:x (fnk [env] ...)
+            :y (fnk [env x] ...)
+            :z (fnk [x y] ...)}
+
+    :namespace "foo"}]}
+```
+
+In this case, for the above graph you'll get three variables `'foo/x`,
+`'foo/y` and `'foo/z`.
 
 By default, all variables of the same graph will be computed once
 whenever at least one of them gets mentioned. This graph's behavior is
