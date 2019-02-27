@@ -1,3 +1,18 @@
+Love the Clojure REPL? Of course you do. That's why Walkable offers
+the most frequently mentioned feature of the REPL according to [State
+of Clojure
+surveys](https://clojure.org/news/2019/01/07/clojure-2019-survey) for
+many years: slow start-up time :)
+
+{% hint style="info" %}
+
+By choosing Walkable over other SQL libraries like HugSQL, HoneySQL
+etc. you have agreed to take the risk of spending up to five minutes
+reading the documentation before your very first SQL query can hit the
+database!
+
+{% endhint %}
+
 Basically you define your floor-plan like this:
 
 ```clojure
