@@ -162,6 +162,6 @@ also on `#fulcro` and [Clojureverse](https://clojureverse.org/)
 
 ## Legal
 
-Copyright © 2018 Hoàng Minh Thắng
+Copyright © 2018 - 2019 Hoàng Minh Thắng
 
 Datomic® is a registered trademark of Cognitect, Inc.
