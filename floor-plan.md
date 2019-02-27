@@ -7,7 +7,7 @@ Notes:
 
 * SQL snippets have been simplified for explanation purpose
 * Backticks are used as quote marks
-* For clarity, part of the floor-plan may not be included
+* For clarity, only relevant parts of the floor-plan are included
 {% endhint %}
 
 ## 1 :idents
