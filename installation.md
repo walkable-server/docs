@@ -13,15 +13,38 @@ Pathom is a Clojure library designed to provide a collection of helper functions
 Don't worry if you don't know how Pathom works yet: Understanding Pathom is not required unless you use advanced features.
 {% endhint %}
 
-Walkable comes with two versions: synchronous \(for Clojure\) and asynchronous \(for both Clojure and Clojurescript\).
-
-First of all, you need to build pathom "parser" with walkable's `sqb/pull-entities` \(or `sqb/async-pull-entities`\)
+## Required namespaces
 
 ```clojure
 (require '[com.wsscode.pathom.core :as p])
 (require '[walkable.sql-query-builder :as sqb])
-
 ```
+
+Depends on which DBMS you're targeting, you'll also need to require a
+specific namespace:
+
+``` clojure
+;; Postgres
+(require 'walkable.sql-query-builder.impl.postgres)
+```
+or:
+
+``` clojure
+;; Sqlite
+(require 'walkable.sql-query-builder.impl.sqlite)
+```
+
+but don't require both!
+
+Mysql and other DBMSes don't require such specific namespaces.
+
+## Build the parser
+
+First of all, you need to build pathom "parser" with walkable's
+`sqb/pull-entities` \(or `sqb/async-pull-entities`\)
+
+Walkable comes with two versions: synchronous \(for Clojure\) and
+asynchronous \(for both Clojure and Clojurescript\).
 
 {% mdtabs title="Sync version" %}
 
@@ -51,6 +74,8 @@ First of all, you need to build pathom "parser" with walkable's `sqb/pull-entiti
 ```
 {% endmdtabs %}
 
+## Define the floor-plan
+
 Then you need to define your floor-plan and compile it
 
 ```clojure
@@ -67,7 +92,9 @@ Then you need to define your floor-plan and compile it
 
 Details about the floor-plan is [here](https://walkable.gitbook.io/walkable/floor-plan).
 
-Ready! It's time to run your graph queries:
+## Run your EQL queries
+
+Ready! It's time to benefit:
 
 Sync version:
 
@@ -86,7 +113,9 @@ Sync version:
                my-query))
 ```
 
-where `my-run-query` and `my-db` is any pair of a function plus a database instance \(even a pair of mock ones!\) that work together like this:
+where `my-run-query` and `my-db` is any pair of a function plus a
+database instance \(even a pair of mock ones!\) that work together
+like this:
 
 ```clojure
 (my-run-query my-db ["select * from fruit where color = ?" "red"])
@@ -121,10 +150,19 @@ Async version, Clojure JVM:
             my-query)))))
 ```
 
-As you can see, `my-run-query` and `my-db` are similar to those in sync version, except that `my-run-query` doesn't return the result directly but in a channel.
+As you can see, `my-run-query` and `my-db` are similar to those in
+sync version, except that `my-run-query` doesn't return the result
+directly but in a channel.
 
-For Nodejs, you'll need to convert between Javascript and Clojure data structure. The file [dev.cljs](https://github.com/walkable-server/walkable/blob/master/dev/src/common/dev.cljs) has examples using sqlite3 node module.
+For Nodejs, you'll need to convert between Javascript and Clojure data
+structure. The file
+[dev.cljs](https://github.com/walkable-server/walkable/blob/master/dev/src/common/dev.cljs)
+has examples using sqlite3 node module.
 
 {% hint style="info" %}
-Please see the file dev.clj \(or its nodejs version dev.cljs\) for executable examples. Consult config.edn for SQL migrations for those examples.
+
+Please see the file dev.clj \(or its nodejs version dev.cljs\) for
+executable examples. Consult config.edn for SQL migrations for those
+examples.
+
 {% endhint %}
