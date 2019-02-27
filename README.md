@@ -117,9 +117,9 @@ You can learn about the above query language [here](query_language.md)
 People may have the impression that Walkable \(and Pathom\) is
 specific to om.next. That is NOT the case! Walkable requires a query
 language that is expressive and based off data structure. Om.next's
-EDN query language happens to satisfy that.
+EDN query language (EQL) happens to satisfy that.
 
-Walkable's goal is to become the ultimate SQL library for Clojure.
+Walkable's goal is to become the ultimate SQL library for buiding APIs.
 
 {% endhint %}
 
