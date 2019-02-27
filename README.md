@@ -155,7 +155,10 @@ More optimization will be added. Check github issues for progress.
 
 ## Support
 
-I'm available for questions regarding walkable on `#walkable` clojurians slack channel. I'm also on `#fulcro` and [Clojureverse](https://clojureverse.org/)
+[![project chat](https://img.shields.io/badge/zulip-join_chat-brightgreen.svg)](https://clojurians.zulipchat.com/#narrow/stream/185804-walkable)
+
+I'm available for questions on `#walkable` clojurians channel. I'm
+also on `#fulcro` and [Clojureverse](https://clojureverse.org/)
 
 ## Legal
 
