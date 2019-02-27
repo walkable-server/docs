@@ -1,3 +1,5 @@
+![perspective](assets/perspective.jpg)
+
 As you can see in **Usage** guide, we need to provide `floor-plan/compile-floor-plan` a map describing the `floor-plan`. You've got some idea about how such a `floor-plan` looks like as you glanced the example in **Overview** section. Now let's walk through each key of the `floor-plan` map in details.
 
 {% hint style="info" %}
