@@ -39,10 +39,10 @@ Basically you define your floor-plan like this:
                                  {:person/pet [:or [:= :pet/color "white"]
                                                    [:= :pet/color "green"]]}
                                  ]]}
- :joins            { ;; will produce:
+ :joins            {;; using a join table. Similar to:
                     ;; "JOIN `person_pet` ON `person`.`id` = `person_pet`.`person_id` JOIN `pet` ON `person_pet`.`pet_id` = `pet`.`id`"
                     :person/pet [:person/id :person-pet/person-id :person-pet/pet-id :pet/id]
-                    ;; will produce
+                    ;; a column refering to another column. Similar to:
                     ;; "JOIN `person` ON `pet`.``owner` = `person`.`id`"
                     :pet/owner [:pet/owner :person/id]}
  :cardinality      {:person/by-id :one
