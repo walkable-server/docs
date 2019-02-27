@@ -1,23 +1,38 @@
-Walkable uses a graph query language to describe what data you want
-from your SQL DBMS. The query language was inspired by Datomic's [Pull
-API](https://docs.datomic.com/on-prem/pull.html) and
-[Graphql](https://graphql.org/) and first introduced in
+Walkable uses EQL, a **Clojure native** query language to describe
+what data you want from your SQL DBMS. The query language was inspired
+by Datomic's [Pull API](https://docs.datomic.com/on-prem/pull.html)
+and [Graphql](https://graphql.org/) and first introduced in
 [om.next](https://github.com/omcljs/om/). However, you don't have to
 use om.next \(or its fork,
 [Fulcro](https://github.com/fulcrologic/fulcro)\) to make use of the
 query language.
 
 {% hint style="info" %}
-If you're familiar with building apps with om.next/fulcro, please note: you often specify a query for each component and compose them up. From server-side perspective \(which is that of Walkable's\), you don't know \(or care\) about those query fragments: you just return the right data in the right shape for the big final top-level query. The reconciler in the client-side will build up the query and break down the result.
+
+If you know GraphQL, then the main differences between the two query
+languages are:
+
+* GraphQL is built atop strings, in constrast with Clojure's rich data
+  structure used by EQL.
+
+* EQL encourages the use of namespaced \(aka qualified\) keywords. In
+  fact, you _must_ use namespaced keywords with Walkable so it can
+  infer which column is from which table. For instance, `:person/id`
+  means the column `id` in the table `person`.
+
+* GraphQL is coupled with a type system. EQL is not.
+
 {% endhint %}
 
 {% hint style="info" %}
-If you know GraphQL, then two main differences between the two query languages are:
 
-* GraphQL is built atop strings, in constrast with Clojure's rich data
-  structure used by our query language.
-
-* om.next query encourages the use of namespaced \(aka qualified\) keywords. In fact, you _must_ use namespaced keywords with Walkable so it can infer which column is from which table. For instance, `:people/id` means the column `id` in the table `people`.
+If you're familiar with building apps with om.next/fulcro, please
+note: you often specify a query for each component and compose them
+up. From server-side perspective \(which is that of Walkable's\), you
+don't know \(or care\) about those query fragments: you just return
+the right data in the right shape for the big final top-level
+query. The reconciler in the client-side will build up the query and
+break down the result.
 
 {% endhint %}
 
