@@ -1,6 +1,10 @@
 ![perspective](assets/perspective.jpg)
 
-As you can see in **Usage** guide, we need to provide `floor-plan/compile-floor-plan` a map describing the `floor-plan`. You've got some idea about how such a `floor-plan` looks like as you glanced the example in **Overview** section. Now let's walk through each key of the `floor-plan` map in details.
+As you can see in **Installation** guide, we need to provide
+`floor-plan/compile-floor-plan` a map describing the
+`floor-plan`. You've got some idea about how such a `floor-plan` looks
+like as you glanced the example in **Overview** section. Now let's
+walk through each key of the `floor-plan` map in details.
 
 {% hint style="info" %}
 Notes:
@@ -12,7 +16,8 @@ Notes:
 
 ## 1 :idents
 
-Idents are the root of all queries. From an SQL dbms perspective, you must start your graph query from somewhere, and it's a table.
+Idents are the root of all queries. From an SQL dbms perspective, you
+must start your graph query from somewhere, and it's a table.
 
 ### 1.1 Keyword idents
 
@@ -34,7 +39,9 @@ SELECT `id`, `name` FROM `person`
 
 ### 1.2 Vector idents
 
-These are idents whose key implies some condition. Instead of providing just the table, you provide the column \(as a namespaced keyword\) whose value match the ident argument found in the ident key.
+These are idents whose key implies some condition. Instead of
+providing just the table, you provide the column \(as a namespaced
+keyword\) whose value match the ident argument found in the ident key.
 
 For example, the following vector ident will require a floor-plan like:
 
@@ -64,7 +71,9 @@ SELECT `id`, `name` FROM `person` WHERE `person`.`id` = 1
 
 ## 2 :joins
 
-Each entry in `:joins` describes the "path" from the source table \(of the source entity\) to the target table \(and optionally the join table\).
+Each entry in `:joins` describes the "path" from the source table \(of
+the source entity\) to the target table \(and optionally the join
+table\).
 
 Let's see some examples.
 
@@ -104,7 +113,9 @@ then you must define the join "path" like this:
 {:joins {:farmer/cow [:farmer/cow-id :cow/id]}}
 ```
 
-the above join path says: start with the value of column `farmer.cow_id` \(the join column\) then find the correspondent in the column `cow.id`.
+the above join path says: start with the value of column
+`farmer.cow_id` \(the join column\) then find the correspondent in the
+column `cow.id`.
 
 {% mdtab title="SQL output" %}
 
@@ -114,7 +125,9 @@ Internally, Walkable will generate this query to fetch the entity whose ident is
 SELECT `farmer`.`name`, `farmer`.`cow_id` FROM `farmer` WHERE `farmer`.`id` = 1
 ```
 
-the value of column `farmer`.`cow_id` will be collected \(for this example it's `10`\). Walkable will then build the query for the join `:farmer/cow`:
+the value of column `farmer`.`cow_id` will be collected \(for this
+example it's `10`\). Walkable will then build the query for the join
+`:farmer/cow`:
 
 ```sql
 SELECT `cow`.`id`, `cow`.`color` FROM `cow` WHERE `cow`.`id` = 10
@@ -229,7 +242,10 @@ and table `cow` has:
 
 {% mdtab title="Floor-plan" %}
 
-The `floor-plan` for this example can be a good exercise for the reader of this documentation. \(Sorry, actually I'm just too lazy to type it here :D \)
+The `floor-plan` for this example can be a good exercise for the
+reader of this documentation. \(Sorry, actually I'm just too lazy to
+type it here :D \)
+
 {% endmdtabs %}
 
 ## 3 :reversed-joins
@@ -267,7 +283,8 @@ Also, another reason to use `:reversed-joins` is that it helps with semantics.
 
 ## 4 :true-columns
 
-A set of available columns must be provided at compile time so Walkable can pre-compute part of SQL query strings.
+A set of available columns must be provided at compile time so
+Walkable can pre-compute part of SQL query strings.
 
 ```clojure
 ;; floor-plan
@@ -277,18 +294,31 @@ A set of available columns must be provided at compile time so Walkable can pre-
 Walkable will automatically include columns found in `:joins` paths so you don't have to.
 
 {% hint style="danger" %}
-Please note: keywords not found in the column set will be ignored. That means if you forget to include any of them, you can't use the missing one in a query's property or filter.
+
+Please note: keywords not found in the column set will be
+ignored. That means if you forget to include any of them, you can't
+use the missing one in a query's property or filter.
+
 {% endhint %}
 
 {% hint style="info" %}
-The rationale for having a pre-defined set of columns is that your query resolver doesn't have to limit itself to an SQL database as a single source of data. If Walkable can't match a keyword to a column, an ident or a join, it will be passed down to the next plugin in the Pathom plugin chain.
+
+The rationale for having a pre-defined set of columns is that your
+query resolver doesn't have to limit itself to an SQL database as a
+single source of data. If Walkable can't match a keyword to a column,
+an ident or a join, it will be passed down to the next plugin in the
+Pathom plugin chain.
+
 {% endhint %}
 
-On the other hand, you don't have to include every single column in your database if you know you will never use some of them in a query's property or filter.
+On the other hand, you don't have to include every single column in
+your database if you know you will never use some of them in a query's
+property or filter.
 
 ## 5 :cardinality
 
-Idents and joins can have cardinality of either `:many` \(which is default\) or `:one`. You declare that by their dispatch keys:
+Idents and joins can have cardinality of either `:many` \(which is
+default\) or `:one`. You declare that by their dispatch keys:
 
 ```clojure
 ;; floor-plan
