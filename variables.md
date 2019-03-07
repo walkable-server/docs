@@ -12,7 +12,7 @@ definition](s-expressions.md#pseudo-columns), an
 [aggregator](aggregators.md) or an [extra-condition
 constraint](filters.md#filters-in-extra-conditions-floor-plan).
 
-```clj
+```clojure
 ;; floor-plan
 {:pseudo-columns {:person/age [:- 'current-year :person/yob]}}
 ```
@@ -23,7 +23,7 @@ value of the variable `current-year` minus the true column
 
 Of course, you must provide how that variable is computed:
 
-``` clj
+```clojure
 ;; also in floor-plan
 {:variable-getters
     [{:key 'current-year
@@ -39,7 +39,7 @@ You can have as many variables in your expresions as you like, as long
 as you tell Walkable how to compute all of them:
 
 
-``` clj
+```clojure
 ;; also in floor-plan
 {:variable-getters
     [{:key 'foo
@@ -52,7 +52,7 @@ as you tell Walkable how to compute all of them:
 A variable's value can be cached throughout the request by the keyword
 `:cached?`:
 
-``` clj
+```clojure
 ;; floor-plan
 {:variable-getters
     [{:key 'current-year
@@ -62,7 +62,7 @@ A variable's value can be cached throughout the request by the keyword
 
 It's totally fine to use namespaced symbols for your variables:
 
-``` clj
+```clojure
 {:pseudo-columns {:person/age [:- 'app/current-year :person/yob]}}
 ```
 
@@ -72,7 +72,7 @@ Sometimes the computation of several variables share a step that you
 don't want to repeat. You can pack those variables inside a
 [Plumbing](https://github.com/plumatic/plumbing/) graph.
 
-``` clj
+```clojure
 (require '[plumbing.core :refer [fnk]])
 
 ;; floor-plan
@@ -90,7 +90,7 @@ you'll get three variables `'x`, `'y` and `'z`.
 You can't use namespaced keywords in graphs. However, you can make the
 equivalent symbols share a namespace. Specify a string for it:
 
-``` clj
+```clojure
 ;; floor-plan
 {:variable-getter-graphs
   [{:graph {:x (fnk [env] ...)
@@ -109,7 +109,7 @@ called "eager evaluation". If the graph is big and computation is
 expressive, you may want it to be "lazy" which means only required
 variables get computed:
 
-``` clj
+```clojure
 ;; floor-plan
 {:variable-getter-graphs
   [{:graph {... ...}
@@ -121,7 +121,7 @@ However, lazy evaluation is not available in Clojurescript version of plumbing.
 Just like normal variable getters, each variable getter graph can be
 cached with the `:cached?` keyword:
 
-``` clj
+```clojure
 ;; floor-plan
 {:variable-getter-graphs
   [{:graph {... ...}
@@ -131,7 +131,7 @@ cached with the `:cached?` keyword:
 As you can see, the value for `:variable-getter-graphs` is a
 vector. You can have as many such graphs as you please:
 
-``` clj
+```clojure
 ;; floor-plan
 {:variable-getter-graphs
   [{:graph {... ...}
