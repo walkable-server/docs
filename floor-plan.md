@@ -333,7 +333,7 @@ Please see documentation for [Filters](filters.md)
 
 ## 7 :emitter
 
-Please see documentation for [Emitters](filters.md)
+Please see documentation for [Emitters](emitter.md)
 
 ## 8 :pseudo-columns
 
