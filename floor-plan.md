@@ -81,7 +81,7 @@ Let's see some examples.
 
 {% mdtabs title="Data" %}
 
-Assume table `cow` contains:
+Assume table `house` contains:
 
 | id | color |
 |---:|:-----:|
@@ -90,47 +90,47 @@ Assume table `cow` contains:
 
 and table `farmer` has:
 
-| id | name | cow_id |
+| id | name | house_id |
 |---:|:-----|-------:|
 |  1 | jon  |     10 |
 |  2 | mary |     20 |
 
 {% mdtab title="Query" %}
 
-and you want to get a farmer along with their cow using the query:
+and you want to get a farmer along with their house using the query:
 
 ```clojure
-[{[:farmer/by-id 1] [:farmer/name {:farmer/cow [:cow/id :cow/color]}]}]
+[{[:farmer/by-id 1] [:farmer/name {:farmer/house [:house/id :house/color]}]}]
 ```
 
-For the join `:farmer/cow`, table `farmer` is the source and table `cow` is the target.
+For the join `:farmer/house`, table `farmer` is the source and table `house` is the target.
 
 {% mdtab title="Floor-plan" %}
 
 then you must define the join "path" like this:
 
 ```clojure
-{:joins {:farmer/cow [:farmer/cow-id :cow/id]}}
+{:joins {:farmer/house [:farmer/house-id :house/id]}}
 ```
 
 the above join path says: start with the value of column
-`farmer.cow_id` \(the join column\) then find the correspondent in the
-column `cow.id`.
+`farmer.house_id` \(the join column\) then find the correspondent in the
+column `house.id`.
 
 {% mdtab title="SQL output" %}
 
 Internally, Walkable will generate this query to fetch the entity whose ident is `[:farmer/by-id 1]`:
 
 ```sql
-SELECT `farmer`.`name`, `farmer`.`cow_id` FROM `farmer` WHERE `farmer`.`id` = 1
+SELECT `farmer`.`name`, `farmer`.`house_id` FROM `farmer` WHERE `farmer`.`id` = 1
 ```
 
-the value of column `farmer`.`cow_id` will be collected \(for this
+the value of column `farmer`.`house_id` will be collected \(for this
 example it's `10`\). Walkable will then build the query for the join
-`:farmer/cow`:
+`:farmer/house`:
 
 ```sql
-SELECT `cow`.`id`, `cow`.`color` FROM `cow` WHERE `cow`.`id` = 10
+SELECT `house`.`id`, `house`.`color` FROM `house` WHERE `house`.`id` = 10
 ```
 
 {% mdtab title="Result" %}
@@ -138,7 +138,7 @@ SELECT `cow`.`id`, `cow`.`color` FROM `cow` WHERE `cow`.`id` = 10
 ```clojure
 {[:farmer/by-id 1] #:farmer{:number 1,
                             :name "jon",
-                            :cow #:cow{:index 10,
+                            :house #:house{:index 10,
                                        :color "white"}}}
 ```
 {% endmdtabs %}
@@ -233,7 +233,7 @@ Assume table `farmer` contains:
 | 1  | jon   |
 | 2  | mary  |
 
-and table `cow` has:
+and table `house` has:
 
 | id | name  | owner_id |
 |---:|------:|---------:|
@@ -258,23 +258,23 @@ The floor-plan for such a join is straightforward:
 
 ```clojure
 ;; floor-plan
-{:joins          {:farmer/cow [:farmer/cow-id :cow/id]}
- :reversed-joins {:cow/owner :farmer/cow}}
+{:joins          {:farmer/house [:farmer/house-id :house/id]}
+ :reversed-joins {:house/owner :farmer/house}}
 ```
 
 {% mdtab title="Queries" %}
 so you can go both ways:
 
-- find the cow of a given farmer
+- find the house of a given farmer
 
 ```clojure
-[{[:farmer/by-id 1] [:farmer/name {:farmer/cow [:cow/id :cow/color]}]}]
+[{[:farmer/by-id 1] [:farmer/name {:farmer/house [:house/id :house/color]}]}]
 ```
 
-- find the owner of a given cow
+- find the owner of a given house
 
 ```clojure
-[{[:cow/by-id 10] [:cow/id :cow/color {:cow/owner [:farmer/name]}]}]
+[{[:house/by-id 10] [:house/id :house/color {:house/owner [:farmer/name]}]}]
 ```
 
 {% endmdtabs %}
@@ -288,7 +288,7 @@ Walkable can pre-compute part of SQL query strings.
 
 ```clojure
 ;; floor-plan
-{:true-columns #{:farmer/name :cow/color}}
+{:true-columns #{:farmer/name :house/color}}
 ```
 
 Walkable will automatically include columns found in `:joins` paths so you don't have to.
