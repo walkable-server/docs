@@ -418,7 +418,7 @@ Party time! Mix them as you wish:
 ```
 {% endmdtabs %}
 
-## Notice
+## Notes
 Please note that Walkable S-expressions are translated directly to SQL
 equivalent. Your DBMS may throw an exception if you ask for this:
 
@@ -449,6 +449,36 @@ Don't be surprised if you see `[:not nil]` is ... `nil`!
 {% mdtab title="result" %}
 ``` clojure
 [{:q nil}]
+```
+{% endmdtabs %}
+
+`nil` can not be checked with `:=`. Use `:nil?` instead
+
+{% mdtabs title="S-expression" %}
+``` clojure
+[:= nil nil]
+```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT (NULL = NULL) AS q"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q nil}]
+```
+{% endmdtabs %}
+
+{% mdtabs title="S-expression" %}
+``` clojure
+[:nil? nil]
+```
+{% mdtab title="SQL output" %}
+``` clojure
+(jdbc/query your-db ["SELECT (NULL IS NULL) AS q"])
+```
+{% mdtab title="result" %}
+``` clojure
+[{:q true}]
 ```
 {% endmdtabs %}
 
