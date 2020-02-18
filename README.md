@@ -57,8 +57,8 @@ Table "person\_pet":
  {:person/id   1
   :person/name "Mary"
   :person/age  20
-  {:person/pet {:pet/name              "Tom"
-                :pet/favorite-location "garden"}}}}
+  :person/pet  {:pet/name              "Tom"
+                :pet/favorite-location "garden"}}}
 ```
 
 {% endmdtabs %}
@@ -97,9 +97,9 @@ Table "user":
 [{:articles/all
   [{:article/title        "Welcome"
     :article/created-date "2018-11-10"
-    {:article/author {:user/id       20
-                      :user/username "lucy"
-                      :user/karma    42}}}]}]
+    :article/author {:user/id       20
+                     :user/username "lucy"
+                     :user/karma    42}}]}]
 ```
 
 {% endmdtabs %}
